@@ -40,10 +40,12 @@ export const Login = () => (
 									</label>
 								</div>
 								<div>
-									<a href="">Forgot password?</a>
+									<Link to="/forgotPassword">
+										<a href="">Forgot password?</a>
+									</Link>
 								</div>
 							</div>
-							<Link to="/users">
+							<Link to="/orders">
 								<button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">
 									LOGIN
 								</button>

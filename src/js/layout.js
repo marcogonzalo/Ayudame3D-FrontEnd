@@ -2,10 +2,12 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { Users } from "./views/Users";
-import injectContext from "./store/appContext";
+import { Orders } from "./views/Orders";
 import { Login } from "./views/Login";
+import { ForgotPassword } from "./views/ForgotPassword";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+import injectContext from "./store/appContext";
 
 //create your first component
 const Layout = () => {
@@ -27,6 +29,12 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/login">
 							<Login />
+						</Route>
+						<Route exact path="/orders">
+							<Orders />
+						</Route>
+						<Route exact path="/forgotPassword">
+							<ForgotPassword />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
