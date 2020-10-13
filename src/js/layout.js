@@ -3,6 +3,9 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { Users } from "./views/Users";
 import { CreateUser } from "./views/CreateUser";
+import { CreateOrder } from "./views/CreateOrder";
+import { EditOrder } from "./views/EditOrder";
+import { DeleteOrder } from "./views/DeleteOrder";
 import { EditUser } from "./views/EditUser";
 import { DeleteUser } from "./views/DeleteUser";
 import { Orders } from "./views/Orders";
@@ -47,6 +50,15 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/deleteUser">
 							<DeleteUser />
+						</Route>
+						<Route exact path="/createOrder">
+							<CreateOrder />
+						</Route>
+						<Route exact path="/editOrder">
+							<EditOrder />
+						</Route>
+						<Route exact path="/deleteOrder">
+							<DeleteOrder />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
