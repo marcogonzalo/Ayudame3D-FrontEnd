@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../../styles/users.scss";
 
 export const Users = () => (
@@ -42,5 +43,17 @@ export const Users = () => (
 				<td />
 			</tr>
 		</table>
+
+		<hr className="my-4" />
+
+		<Link to="/createUser">
+			<button className="btn btn-primary" type="submit" value="submit" m>
+				Create user
+			</button>
+
+			<button className="btn btn-primary" type="submit" value="submit">
+				Edit user
+			</button>
+		</Link>
 	</div>
 );

@@ -45,7 +45,7 @@ export const Login = () => (
 									</Link>
 								</div>
 							</div>
-							<Link to="/orders">
+							<Link to="/users">
 								<button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">
 									LOGIN
 								</button>
