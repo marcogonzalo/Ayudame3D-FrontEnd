@@ -1,9 +1,10 @@
 import React from "react";
-import "../../styles/createUser.scss";
+import { Link } from "react-router-dom";
+import "../../styles/editUser.scss";
 
-export const CreateUser = () => (
+export const EditUser = () => (
 	<div className="container">
-		<h2> Create User</h2>
+		<h2> Edit User</h2>
 		<div className="row justify-content-center">
 			<div className="col-md-8">
 				<div className="card">
@@ -87,9 +88,11 @@ export const CreateUser = () => (
 							</div>
 
 							<div className="col-md-6 offset-md-4">
-								<button type="submit" className="btn btn-primary">
-									Create user
-								</button>
+								<Link to="/users">
+									<button className="btn btn-primary" type="submit" value="submit" m>
+										Save user
+									</button>
+								</Link>
 							</div>
 						</form>
 					</div>

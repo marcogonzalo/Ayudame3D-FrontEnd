@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { Users } from "./views/Users";
 import { CreateUser } from "./views/CreateUser";
+import { EditUser } from "./views/EditUser";
 import { Orders } from "./views/Orders";
 import { Login } from "./views/Login";
 import { ForgotPassword } from "./views/ForgotPassword";
@@ -39,6 +40,9 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/createUser">
 							<CreateUser />
+						</Route>
+						<Route exact path="/editUser">
+							<EditUser />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
