@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../styles/createUser.scss";
+import "../../styles/deleteUser.scss";
 
-export const CreateUser = () => (
+export const DeleteUser = () => (
 	<div className="container">
-		<h2> Create User</h2>
+		<h2> DELETE User</h2>
 		<div className="row justify-content-center">
 			<div className="col-md-8">
 				<div className="card">
@@ -89,8 +89,8 @@ export const CreateUser = () => (
 
 							<div className="col-md-6 offset-md-4">
 								<Link to="/users">
-									<button type="submit" className="btn btn-primary">
-										Create user
+									<button className="btn btn-primary" type="submit" value="submit" m>
+										DELETE user
 									</button>
 								</Link>
 							</div>

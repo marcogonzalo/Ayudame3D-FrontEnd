@@ -40,7 +40,9 @@ export const Users = () => (
 								data-toggle="tooltip"
 								data-placement="top"
 								title="Delete">
-								<i className="far fa-trash-alt" />
+								<Link to="/deleteUser">
+									<i className="far fa-trash-alt" />
+								</Link>
 							</button>
 						</li>
 					</ul>
@@ -72,7 +74,9 @@ export const Users = () => (
 								data-toggle="tooltip"
 								data-placement="top"
 								title="Delete">
-								<i className="far fa-trash-alt" />
+								<Link to="/deleteUser">
+									<i className="far fa-trash-alt" />
+								</Link>
 							</button>
 						</li>
 					</ul>
@@ -104,7 +108,9 @@ export const Users = () => (
 								data-toggle="tooltip"
 								data-placement="top"
 								title="Delete">
-								<i className="far fa-trash-alt" />
+								<Link to="/deleteUser">
+									<i className="far fa-trash-alt" />
+								</Link>
 							</button>
 						</li>
 					</ul>
@@ -136,7 +142,9 @@ export const Users = () => (
 								data-toggle="tooltip"
 								data-placement="top"
 								title="Delete">
-								<i className="far fa-trash-alt" />
+								<Link to="/deleteUser">
+									<i className="far fa-trash-alt" />
+								</Link>
 							</button>
 						</li>
 					</ul>
@@ -168,7 +176,9 @@ export const Users = () => (
 								data-toggle="tooltip"
 								data-placement="top"
 								title="Delete">
-								<i className="far fa-trash-alt" />
+								<Link to="/deleteUser">
+									<i className="far fa-trash-alt" />
+								</Link>
 							</button>
 						</li>
 					</ul>

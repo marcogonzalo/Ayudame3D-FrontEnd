@@ -4,6 +4,7 @@ import ScrollToTop from "./component/scrollToTop";
 import { Users } from "./views/Users";
 import { CreateUser } from "./views/CreateUser";
 import { EditUser } from "./views/EditUser";
+import { DeleteUser } from "./views/DeleteUser";
 import { Orders } from "./views/Orders";
 import { Login } from "./views/Login";
 import { ForgotPassword } from "./views/ForgotPassword";
@@ -43,6 +44,9 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/editUser">
 							<EditUser />
+						</Route>
+						<Route exact path="/deleteUser">
+							<DeleteUser />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
