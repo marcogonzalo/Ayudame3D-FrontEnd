@@ -92,6 +92,11 @@ export const EditUser = () => (
 									<button className="btn btn-primary" type="submit" value="submit" m>
 										Save user
 									</button>
+								</Link>{" "}
+								<Link to="/users">
+									<button className="btn btn-primary" type="submit" value="submit" m>
+										Cancel
+									</button>
 								</Link>
 							</div>
 						</form>

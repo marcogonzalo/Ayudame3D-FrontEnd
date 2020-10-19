@@ -24,7 +24,15 @@ export const EditOrder = () => (
 									Helper
 								</label>
 								<div className="col-md-6">
-									<input type="text" id="helper" className="form-control" name="helper" />
+									<div className="col-md-6">
+										<select className="custom-select mr-sm-2" id="inlineFormCustomSelect">
+											<option selected>Choose...</option>
+											<option value="1">Jhon Matius</option>
+											<option value="2">Pedro Fernandez</option>
+											<option value="3">Jose Gonzalez</option>
+											<option value="4">María Sanchez</option>
+										</select>
+									</div>
 								</div>
 							</div>
 
@@ -33,7 +41,15 @@ export const EditOrder = () => (
 									Status
 								</label>
 								<div className="col-md-6">
-									<input type="text" id="status" className="form-control" name="status" />
+									<div className="col-md-6">
+										<select className="custom-select mr-sm-2" id="inlineFormCustomSelect">
+											<option selected>Choose...</option>
+											<option value="1">Pending</option>
+											<option value="2">Processing</option>
+											<option value="3">Rejected</option>
+											<option value="4">Completed</option>
+										</select>
+									</div>
 								</div>
 							</div>
 
@@ -50,6 +66,11 @@ export const EditOrder = () => (
 								<Link to="/orders">
 									<button type="submit" className="btn btn-primary">
 										Save Order
+									</button>
+								</Link>{" "}
+								<Link to="/orders">
+									<button type="submit" className="btn btn-primary">
+										Cancel
 									</button>
 								</Link>
 							</div>

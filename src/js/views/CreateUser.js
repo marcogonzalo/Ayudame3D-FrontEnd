@@ -24,7 +24,13 @@ export const CreateUser = () => (
 									Role
 								</label>
 								<div className="col-md-6">
-									<input type="text" id="user_name" className="form-control" name="username" />
+									<div className="col-md-6">
+										<select className="custom-select mr-sm-2" id="inlineFormCustomSelect">
+											<option value="1">Helper</option>
+											<option value="2">Gestor</option>
+											<option value="3">Administrador</option>
+										</select>
+									</div>
 								</div>
 							</div>
 
@@ -91,6 +97,11 @@ export const CreateUser = () => (
 								<Link to="/users">
 									<button type="submit" className="btn btn-primary">
 										Create user
+									</button>
+								</Link>{" "}
+								<Link to="/users">
+									<button type="submit" className="btn btn-primary">
+										Cancel
 									</button>
 								</Link>
 							</div>

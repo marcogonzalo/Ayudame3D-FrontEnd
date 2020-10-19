@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../../styles/forgotPassword.scss";
 
 export const ForgotPassword = () => (
@@ -43,7 +44,11 @@ export const ForgotPassword = () => (
 												type="submit"
 											/>
 										</div>
-										<input type="hidden" className="hide" name="token" id="token" value="" />
+										<div className="form-group">
+											<Link to="/">
+												<button className="btn btn-lg btn-primary btn-block">Cancel</button>
+											</Link>
+										</div>
 									</form>
 								</div>
 							</div>
