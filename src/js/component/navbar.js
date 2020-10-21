@@ -1,19 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import $ from "jquery";
+import { Link, useHistory } from "react-router-dom";
 import logoAyudame from "../../img/logoAyudame.png";
+import { ConfirmModal } from "./ConfirmModal";
 
 export const Navbar = () => {
+	const history = useHistory();
+
+	function logout() {
+		history.push("/");
+	}
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 			<Link to="/">
-				<a className="navbar-brand" href="#">
+				<span className="navbar-brand">
 					<img src={logoAyudame} width="180" height="50" alt="" loading="lazy" />
-				</a>
+				</span>
 			</Link>
 
 			<button
-				className="navbar-toggler toggler-example"
+				className="navbar-toggler"
 				type="button"
 				data-toggle="collapse"
 				data-target="#navbarSupportedContent1"
@@ -25,42 +31,25 @@ export const Navbar = () => {
 				</span>
 			</button>
 
-			<div className="col-md-6 offset-md-4">
-				<Link to="/users">
-					<button type="submit" className="btn btn-primary">
-						USERS
-					</button>
-				</Link>{" "}
-				<Link to="/orders">
-					<button type="submit" className="btn btn-primary">
-						ORDERS
-					</button>
-				</Link>{" "}
-				<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#myModal">
-					LOGOUT
-				</button>
-				<div className="modal fade" id="myModal" role="dialog">
-					<div className="modal-dialog modal-sm">
-						<div className="modal-content">
-							<div className="modal-header">
-								<button type="button" className="close" data-dismiss="modal">
-									&times;
-								</button>
-								<h4 className="modal-title">Modal Header</h4>
-							</div>
-							<div className="modal-body">
-								<p>This is a small modal.</p>
-							</div>
-							<div className="modal-footer">
-								<Link to="/">
-									<button type="button" className="btn btn-default" data-dismiss="modal">
-										Close
-									</button>
-								</Link>
-							</div>
-						</div>
-					</div>
-				</div>
+			<div className="col-md-6 offset-md-4 collapse navbar-collapse" id="navbarSupportedContent1">
+				<ul className="navbar-nav ml-auto mt-2 mt-lg-0">
+					<li className="nav-item m">
+						<Link to="/users">Users</Link>
+					</li>
+					<li className="nav-item">
+						<Link to="/orders">Orders</Link>
+					</li>
+					<li className="nav-item">
+						<button
+							type="button"
+							className="btn btn-primary"
+							data-toggle="modal"
+							data-target="#modal-logout">
+							Logout
+						</button>
+					</li>
+				</ul>
+				<ConfirmModal id="modal-logout" body="¿Estas seguro de que quieres cerrar sesión?" confirm={logout} />
 			</div>
 		</nav>
 	);

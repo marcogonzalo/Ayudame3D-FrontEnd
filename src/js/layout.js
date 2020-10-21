@@ -8,7 +8,7 @@ import { EditOrder } from "./views/EditOrder";
 import { EditUser } from "./views/EditUser";
 import { Orders } from "./views/Orders";
 import { Login } from "./views/Login";
-import { ForgotPassword } from "./views/ForgotPassword";
+import { ForgotPassword } from "./views/forgot-password";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import injectContext from "./store/appContext";
@@ -37,19 +37,19 @@ const Layout = () => {
 						<Route exact path="/orders">
 							<Orders />
 						</Route>
-						<Route exact path="/forgotPassword">
+						<Route exact path="/forgot-password">
 							<ForgotPassword />
 						</Route>
-						<Route exact path="/createUser">
+						<Route exact path="/users/create">
 							<CreateUser />
 						</Route>
-						<Route exact path="/editUser">
+						<Route exact path="/users/:id/edit">
 							<EditUser />
 						</Route>
-						<Route exact path="/createOrder">
+						<Route exact path="/orders/create">
 							<CreateOrder />
 						</Route>
-						<Route exact path="/editOrder">
+						<Route exact path="/orders/:id/edit">
 							<EditOrder />
 						</Route>
 						<Route>

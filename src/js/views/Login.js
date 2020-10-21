@@ -40,9 +40,7 @@ export const Login = () => (
 									</label>
 								</div>
 								<div>
-									<Link to="/forgotPassword">
-										<a href="">Forgot password?</a>
-									</Link>
+									<Link to="/forgot-password">Forgot password?</Link>
 								</div>
 							</div>
 							<Link to="/orders">
