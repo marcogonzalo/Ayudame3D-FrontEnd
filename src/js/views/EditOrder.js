@@ -1,57 +1,48 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/editOrder.scss";
+import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
 
 export const EditOrder = () => {
 	const order = {
 		id: 8663,
-		status: "pending",
+		status: {
+			id: 1,
+			name: "pending"
+		},
 		helper: {
 			id: 3,
-			name: "John Matius"
+			name: "John Matius",
+			email: "jmatius@gmail.com"
 		},
-		email: "jmatius@gmail.com",
 		description: "Diseño 3D"
 	};
 
 	let helpers = [
 		{
 			id: 1,
-			name: "Erik Wilson",
-			order: {
-				id: 1234,
-				status: "processing"
-			}
+			name: "Erik Wilson"
 		},
 		{
 			id: 2,
-			name: "Mario Fernanzez",
-			order: {
-				id: 4562,
-				status: "rejected"
-			}
+			name: "Mario Fernanzez"
 		},
 		{
 			id: 3,
-			name: "John Matius",
-			order: {
-				id: 1234,
-				status: "pending"
-			}
+			name: "John Matius"
 		}
 	];
 
-	let helperHtml = helpers.map(helper => {
-		let selected = "";
-		if (helper.id === order.helper.id) {
-			selected = "selected";
+	let statuses = [
+		{
+			id: 1,
+			name: "pending"
+		},
+		{
+			id: 2,
+			name: "completed"
 		}
-		return (
-			<option selected={selected} key={helper.id} value={helper.name}>
-				{helper.name}
-			</option>
-		);
-	});
+	];
 
 	return (
 		<div className="container">
@@ -60,7 +51,7 @@ export const EditOrder = () => {
 				<div className="col-md-8">
 					<div className="card">
 						<div className="card-body">
-							<form name="my-form" onSubmit="return validform()" action="success.php" method="">
+							<form name="my-form">
 								<div className="form-group row">
 									<label htmlFor="description" className="col-md-4 col-form-label text-md-right">
 										Description
@@ -82,10 +73,7 @@ export const EditOrder = () => {
 									</label>
 									<div className="col-md-6">
 										<div className="col-md-6">
-											<select className="custom-select mr-sm-2" id="inlineFormCustomSelect">
-												<option>Choose...</option>
-												{helperHtml}
-											</select>
+											<SelectFilledAndSelected data={helpers} idSelected={order.helper.id} />
 										</div>
 									</div>
 								</div>
@@ -96,10 +84,7 @@ export const EditOrder = () => {
 									</label>
 									<div className="col-md-6">
 										<div className="col-md-6">
-											<select className="custom-select mr-sm-2" id="inlineFormCustomSelect">
-												<option selected>Choose...</option>
-												{}
-											</select>
+											<SelectFilledAndSelected data={statuses} idSelected={order.status.id} />
 										</div>
 									</div>
 								</div>

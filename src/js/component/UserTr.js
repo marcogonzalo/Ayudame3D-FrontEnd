@@ -4,10 +4,6 @@ import { ConfirmModal } from "../component/ConfirmModal";
 import { PropTypes } from "prop-types";
 
 export const UserTr = props => {
-	UserTr.propTypes = {
-		user: PropTypes.obj
-	};
-
 	const { user } = props;
 
 	function archiveUser() {
@@ -46,4 +42,7 @@ export const UserTr = props => {
 			</td>
 		</tr>
 	);
+};
+UserTr.propTypes = {
+	user: PropTypes.obj
 };

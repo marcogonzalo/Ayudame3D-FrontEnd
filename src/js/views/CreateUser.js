@@ -9,7 +9,7 @@ export const CreateUser = () => (
 			<div className="col-md-8">
 				<div className="card">
 					<div className="card-body">
-						<form name="my-form" onSubmit="return validform()" action="success.php" method="">
+						<form name="my-form">
 							<div className="form-group row">
 								<label htmlFor="nid_number" className="col-md-4 col-form-label text-md-right">
 									<abbr title="Id User">ID</abbr> Number

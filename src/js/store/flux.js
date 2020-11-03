@@ -1,20 +1,21 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			confirmModal: {
+				body: "",
+				confirm: null
+			}
 		},
 		actions: {
+			askConfirmation(body, confirmCallback) {
+				setStore({
+					confirmModal: {
+						body: body,
+						confirm: confirmCallback
+					}
+				});
+				$("#confirm-modal").modal();
+			},
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");

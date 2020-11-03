@@ -1,24 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { ConfirmModal } from "../component/ConfirmModal";
+import { Context } from "../store/appContext";
 import { PropTypes } from "prop-types";
 
 export const OrderTr = props => {
-	OrderTr.propTypes = {
-		order: PropTypes.obj
-	};
-
+	const { actions } = useContext(Context);
 	const { order } = props;
 
 	function archiveOrder() {
-		console.log(`Archivariamos el pedido con id ${order.id}`);
+		actions.askConfirmation("Are you sure?", archiveOrderConfirmed);
+	}
+
+	function archiveOrderConfirmed() {
+		console.log("test");
 	}
 
 	return (
 		<tr>
 			<td>{order.id}</td>
-			<td>{order.status}</td>
-			<td>{order.helper.name}</td>
+			<td>{order.status.name}</td>
+			<td>{order.helper.full_name}</td>
 			<td className="d-none d-sm-table-cell">{order.helper.email}</td>
 			<td>
 				<ul className="list-inline m-0">
@@ -35,19 +36,14 @@ export const OrderTr = props => {
 						</button>
 					</li>
 					<li className="list-inline-item">
-						<i
-							className="far fa-trash-alt"
-							data-toggle="modal"
-							data-target={`#order-archive-${order.id}`}
-						/>
-						<ConfirmModal
-							id={`order-archive-${order.id}`}
-							body="¿Deseas archivar este pedido?"
-							confirm={archiveOrder}
-						/>
+						<i className="far fa-trash-alt" onClick={archiveOrder} />
 					</li>
 				</ul>
 			</td>
 		</tr>
 	);
+};
+
+OrderTr.propTypes = {
+	order: PropTypes.object
 };

@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/editUser.scss";
+import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
 
 export const EditUser = () => {
 	const user = {
 		id: 3,
-		role: "Helper",
+		role: {
+			id: 1,
+			name: "Helper"
+		},
 		name: "John Matius",
 		email: "jmatius@gmail.com",
 		phone: "9652356",
@@ -14,35 +18,20 @@ export const EditUser = () => {
 		country: "España"
 	};
 
-	let usersInf = [
+	let roles = [
 		{
 			id: 1,
-			name: "Erik Wilson",
-			role: "Helper"
+			name: "Helper"
 		},
 		{
 			id: 2,
-			name: "Mario Fernanzez",
-			role: "Gestor"
+			name: "Gestor"
 		},
 		{
 			id: 3,
-			name: "John Matius",
-			role: "Administrator"
+			name: "Administrator"
 		}
 	];
-
-	let userHtml = usersInf.map(userdata => {
-		let selected = "";
-		if (userdata.id === user.id) {
-			selected = "selected";
-		}
-		return (
-			<option selected={selected} key={userdata.id} value={userdata.role}>
-				{userdata.role}
-			</option>
-		);
-	});
 
 	return (
 		<div className="container">
@@ -51,7 +40,7 @@ export const EditUser = () => {
 				<div className="col-md-8">
 					<div className="card">
 						<div className="card-body">
-							<form name="my-form" onSubmit="return validform()" action="success.php" method="">
+							<form name="my-form">
 								<div className="form-group row">
 									<label htmlFor="nid_number" className="col-md-4 col-form-label text-md-right">
 										<abbr title="Id User">ID</abbr> Number
@@ -72,10 +61,7 @@ export const EditUser = () => {
 										Role
 									</label>
 									<div className="col-md-6">
-										<select className="custom-select mr-sm-2" id="inlineFormCustomSelect">
-											<option>Choose...</option>
-											{userHtml}
-										</select>
+										<SelectFilledAndSelected data={roles} idSelected={user.role.id} />
 									</div>
 								</div>
 
@@ -171,12 +157,12 @@ export const EditUser = () => {
 
 								<div className="col-md-6 offset-md-4">
 									<Link to="/users">
-										<button className="btn btn-primary" type="submit" value="submit" m>
+										<button className="btn btn-primary" type="submit" value="submit">
 											Save user
 										</button>
-									</Link>{" "}
+									</Link>
 									<Link to="/users">
-										<button className="btn btn-primary" type="submit" value="submit" m>
+										<button className="btn btn-primary" type="submit" value="submit">
 											Cancel
 										</button>
 									</Link>

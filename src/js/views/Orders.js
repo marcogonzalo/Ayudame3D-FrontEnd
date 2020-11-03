@@ -1,66 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/orders.scss";
 import { OrderTr } from "../component/OrderTr";
 import { ConfirmModal } from "../component/ConfirmModal";
 
 export const Orders = () => {
-	let orders = [
-		{
-			id: 1234,
-			status: "processing",
-			helper: {
-				id: 1,
-				name: "Erik Wilson",
-				email: "erwilson@gmail.com"
-			}
-		},
+	const [orders, setOrders] = useState([]);
 
-		{
-			id: 5214,
-			status: "processing",
-			helper: {
-				id: 2,
-				name: "Mario Fernanzez",
-				email: "mfernandez@gmail.com"
+	useEffect(() => {
+		fetch("https://3000-c6e3d648-b9dc-4aca-942d-937c30697a99.ws-eu01.gitpod.io/orders", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
 			}
-		},
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(responseJson => {
+				setOrders(responseJson);
+			});
+	}, []);
 
-		{
-			id: 8663,
-			status: "pending",
-			helper: {
-				id: 3,
-				name: "John Matius",
-				email: "jmathius@gmail.com"
-			}
-		},
-
-		{
-			id: 9951,
-			status: "rejected",
-			helper: {
-				id: 4,
-				name: "Fernando Gonzalez",
-				email: "fgonzalez@gmail.com"
-			}
-		},
-
-		{
-			id: 6689,
-			status: "completes",
-			helper: {
-				id: 5,
-				name: "Pedro Andrés",
-				email: "pandres@gmail.com"
-			}
-		}
-	];
-
-	function archiveOrder() {} // ??????
 	const ordersHtml = orders.map(order => {
 		return <OrderTr key={order.id} order={order} />;
 	});
+
 	return (
 		<div className="text-center mt-5">
 			<Link to="/orders/create">

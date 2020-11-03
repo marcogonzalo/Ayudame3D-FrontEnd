@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/users.scss";
@@ -5,49 +6,24 @@ import { UserTr } from "../component/UserTr";
 import { ConfirmModal } from "../component/ConfirmModal";
 
 export const Users = () => {
-	let users = [
-		{
-			id: 1,
-			name: "Erik Wilson",
-			role: "helper",
-			email: "erwilson@gmail.com",
-			Address: "Nadrid"
-		},
+	const [users, setUsers] = useState([]);
 
-		{
-			id: 2,
-			name: "Jhon Matius",
-			role: "helper",
-			email: "jmatius@gmail.com",
-			Address: "Londres"
-		},
+	useEffect(() => {
+		fetch("https://3000-c6e3d648-b9dc-4aca-942d-937c30697a99.ws-eu01.gitpod.io/users", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(responseJson => {
+				setUsers(responseJson);
+			});
+	}, []);
 
-		{
-			id: 3,
-			name: "Pedro Fernandez",
-			role: "Administrador",
-			email: "pfernandez@gmail.com",
-			Address: "Nadrid"
-		},
-
-		{
-			id: 4,
-			name: "José Gonzalez",
-			role: "helper",
-			email: "jgonzalez@gmail.com",
-			Address: "Barcelona"
-		},
-
-		{
-			id: 5,
-			name: "Juan Perez",
-			role: "Gestor",
-			email: "jperez@gmail.com",
-			Address: "Nadrid"
-		}
-	];
-
-	function archiveUser() {} // ??????
 	const usersHtml = users.map(user => {
 		return <UserTr key={user.id} user={user} />;
 	});
