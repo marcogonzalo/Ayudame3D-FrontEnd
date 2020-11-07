@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import logoAyudame from "../../img/logoAyudame.png";
 import { ConfirmModal } from "./ConfirmModal";
+import canRoleIDDo from "../helpers/UserHelper";
+import { Context } from "../store/appContext";
 
 export const Navbar = () => {
 	const history = useHistory();
+	const { actions } = useContext(Context);
 
 	function logout() {
 		history.push("/");
 	}
+	let role_id = actions.getLoggedUserRoleID();
+	let liViewUsers = "";
+	if (canRoleIDDo(role_id, "users/index")) {
+		liViewUsers = (
+			<li className="nav-item m">
+				<Link to="/users">Users</Link>
+			</li>
+		);
+	}
 
+	let liViewOrders = "";
+	if (canRoleIDDo(role_id, "orders/index")) {
+		liViewOrders = (
+			<li className="nav-item">
+				<Link to="/orders">Orders</Link>
+			</li>
+		);
+	}
+
+	let liLogout = "";
+	if (canRoleIDDo(role_id, "orders/index")) {
+		liLogout = (
+			<li className="nav-item">
+				<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#modal-logout">
+					Logout
+				</button>
+			</li>
+		);
+	}
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 			<Link to="/">
@@ -33,21 +64,9 @@ export const Navbar = () => {
 
 			<div className="col-md-6 offset-md-4 collapse navbar-collapse" id="navbarSupportedContent1">
 				<ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-					<li className="nav-item m">
-						<Link to="/users">Users</Link>
-					</li>
-					<li className="nav-item">
-						<Link to="/orders">Orders</Link>
-					</li>
-					<li className="nav-item">
-						<button
-							type="button"
-							className="btn btn-primary"
-							data-toggle="modal"
-							data-target="#modal-logout">
-							Logout
-						</button>
-					</li>
+					{liViewUsers}
+					{liViewOrders}
+					{liLogout}
 				</ul>
 				<ConfirmModal id="modal-logout" body="¿Estas seguro de que quieres cerrar sesión?" confirm={logout} />
 			</div>

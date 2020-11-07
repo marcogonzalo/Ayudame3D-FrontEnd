@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../../styles/login.scss";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 import { useHistory } from "react-router-dom";
+import { BASE_URL } from "../helpers/UrlHelper";
 
 export const Login = () => {
+	const { actions } = useContext(Context);
 	let history = useHistory();
 
 	const [email, setEmail] = useState(null);
@@ -16,7 +19,7 @@ export const Login = () => {
 			password: password
 		};
 
-		fetch("https://3000-c6e3d648-b9dc-4aca-942d-937c30697a99.ws-eu01.gitpod.io/login", {
+		fetch(BASE_URL + "login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -30,6 +33,7 @@ export const Login = () => {
 				if (responseJson.status === "ko") {
 					alert("El usuario no existe.");
 				} else {
+					actions.setLoggedUser(responseJson.user);
 					localStorage.setItem("accessToken", responseJson.access_token);
 					alert("Usuario correcto");
 					history.push("/orders");

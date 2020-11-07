@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { PropTypes } from "prop-types";
+import canRoleIDDo from "../helpers/UserHelper";
 
 export const OrderTr = props => {
 	const { actions } = useContext(Context);
@@ -13,6 +14,16 @@ export const OrderTr = props => {
 
 	function archiveOrderConfirmed() {
 		console.log("test");
+	}
+
+	let role_id = actions.getLoggedUserRoleID();
+	let liDeleteOrder = "";
+	if (canRoleIDDo(role_id, "orders/delete")) {
+		liDeleteOrder = (
+			<li className="list-inline-item">
+				<i className="far fa-trash-alt" onClick={archiveOrder} />
+			</li>
+		);
 	}
 
 	return (
@@ -35,9 +46,7 @@ export const OrderTr = props => {
 							</Link>
 						</button>
 					</li>
-					<li className="list-inline-item">
-						<i className="far fa-trash-alt" onClick={archiveOrder} />
-					</li>
+					{liDeleteOrder}
 				</ul>
 			</td>
 		</tr>

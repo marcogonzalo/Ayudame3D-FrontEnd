@@ -4,9 +4,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 			confirmModal: {
 				body: "",
 				confirm: null
-			}
+			},
+			loggedUser: null
 		},
 		actions: {
+			getLoggedUserRoleID() {
+				const store = getStore();
+				let user = this.getLoggedUser();
+				if (user !== null && user.role_id) {
+					return user.role_id;
+				} else {
+					return null;
+				}
+			},
+			getLoggedUser() {
+				const store = getStore();
+				if (store.loggedUser !== null) {
+					return store.loggedUser;
+				}
+
+				let userInLocalStorage = localStorage.getItem("loggedUser");
+				if (userInLocalStorage !== null) {
+					this.setLoggedUser(JSON.parse(userInLocalStorage));
+				}
+
+				return userInLocalStorage;
+			},
+			setLoggedUser(user) {
+				setStore({ loggedUser: user });
+				localStorage.setItem("loggedUser", JSON.stringify(user));
+			},
 			askConfirmation(body, confirmCallback) {
 				setStore({
 					confirmModal: {
@@ -15,29 +42,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				});
 				$("#confirm-modal").modal();
-			},
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
 			}
 		}
 	};
