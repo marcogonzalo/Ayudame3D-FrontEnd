@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { PropTypes } from "prop-types";
-import canRoleIDDo from "../helpers/UserHelper";
+import canRoleIDDo, { isHelper } from "../helpers/UserHelper";
 
 export const OrderTr = props => {
 	const { actions } = useContext(Context);
@@ -26,12 +26,23 @@ export const OrderTr = props => {
 		);
 	}
 
+	let conditionalColumns = "";
+	if (!isHelper(role_id)) {
+		conditionalColumns = (
+			<Fragment>
+				<td>{order.helper.full_name}</td>
+				<td className="d-none d-sm-table-cell">{order.helper.email}</td>
+			</Fragment>
+		);
+	} else {
+		conditionalColumns = <td>{order.description}</td>;
+	}
+
 	return (
 		<tr>
 			<td>{order.id}</td>
 			<td>{order.status.name}</td>
-			<td>{order.helper.full_name}</td>
-			<td className="d-none d-sm-table-cell">{order.helper.email}</td>
+			{conditionalColumns}
 			<td>
 				<ul className="list-inline m-0">
 					<li className="list-inline-item">

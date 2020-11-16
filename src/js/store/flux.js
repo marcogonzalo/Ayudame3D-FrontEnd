@@ -34,6 +34,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ loggedUser: user });
 				localStorage.setItem("loggedUser", JSON.stringify(user));
 			},
+			logout() {
+				setStore({ loggedUser: null });
+				localStorage.removeItem("loggedUser");
+			},
 			askConfirmation(body, confirmCallback) {
 				setStore({
 					confirmModal: {

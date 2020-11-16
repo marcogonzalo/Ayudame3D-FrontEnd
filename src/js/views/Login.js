@@ -11,6 +11,7 @@ export const Login = () => {
 
 	const [email, setEmail] = useState(null);
 	const [password, setPassword] = useState(null);
+	const [error, setError] = useState("");
 
 	function login(event) {
 		event.preventDefault();
@@ -31,14 +32,22 @@ export const Login = () => {
 			})
 			.then(responseJson => {
 				if (responseJson.status === "ko") {
-					alert("El usuario no existe.");
+					setError("El usuario no existe.");
 				} else {
 					actions.setLoggedUser(responseJson.user);
 					localStorage.setItem("accessToken", responseJson.access_token);
-					alert("Usuario correcto");
 					history.push("/orders");
 				}
 			});
+	}
+
+	let errorHTML = "";
+	if (error) {
+		errorHTML = (
+			<div className="alert alert-danger" role="alert">
+				{error}
+			</div>
+		);
 	}
 
 	return (
@@ -48,6 +57,7 @@ export const Login = () => {
 					<div className="card card-signin my-5">
 						<div className="card-body">
 							<h5 className="card-title text-center">LOGIN</h5>
+							{errorHTML}
 							<form className="form-signin" onSubmit={login}>
 								<div className="form-label-group">
 									<input

@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, Fragment } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/orders.scss";
 import { OrderTr } from "../component/OrderTr";
 import { ConfirmModal } from "../component/ConfirmModal";
 import { Context } from "../store/appContext";
-import canRoleIDDo from "../helpers/UserHelper";
+import canRoleIDDo, { isHelper } from "../helpers/UserHelper";
 import { BASE_URL } from "../helpers/UrlHelper";
 
 export const Orders = () => {
@@ -68,6 +68,18 @@ export const Orders = () => {
 		);
 	}
 
+	let conditionalColumns = "";
+	if (!isHelper(role_id)) {
+		conditionalColumns = (
+			<Fragment>
+				<th>Helper</th>
+				<th className="d-none d-sm-table-cell">Email</th>
+			</Fragment>
+		);
+	} else {
+		conditionalColumns = <th>Description</th>;
+	}
+
 	return (
 		<div className="text-center mt-5">
 			{buttonCreateOrder}
@@ -81,8 +93,7 @@ export const Orders = () => {
 					<tr>
 						<th>Id Order</th>
 						<th>Status</th>
-						<th>Helper</th>
-						<th className="d-none d-sm-table-cell">Email</th>
+						{conditionalColumns}
 						<th>Actions</th>
 					</tr>
 					{ordersHtml}

@@ -11,6 +11,7 @@ export const Navbar = () => {
 
 	function logout() {
 		history.push("/");
+		actions.logout();
 	}
 	let role_id = actions.getLoggedUserRoleID();
 	let liViewUsers = "";
