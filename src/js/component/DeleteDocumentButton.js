@@ -30,7 +30,7 @@ export const DeleteDocumentButton = props => {
 	}
 
 	return (
-		<button type="button" className="btn btn-danger" onClick={deleteDocument}>
+		<button type="button" className="btn btn-danger btn-sm" onClick={deleteDocument}>
 			{props.children}
 		</button>
 	);

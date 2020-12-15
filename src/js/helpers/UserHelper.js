@@ -3,6 +3,8 @@ export default function canRoleIDDo(role_id, topic) {
 		case "orders/delete":
 		case "users/create":
 		case "orders/setStatusManual":
+		case "users/setRolesManual":
+		case "users/changeRole":
 			if (isAdmin(role_id)) {
 				return true;
 			}

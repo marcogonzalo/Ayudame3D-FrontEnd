@@ -58,6 +58,7 @@ export const Orders = () => {
 	const ordersHtml = orders.map(order => {
 		return <OrderTr key={order.id} order={order} />;
 	});
+
 	let role_id = actions.getLoggedUserRoleID();
 	let buttonCreateOrder = "";
 	if (canRoleIDDo(role_id, "orders/create")) {

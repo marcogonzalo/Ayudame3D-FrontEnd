@@ -18,7 +18,9 @@ export const Navbar = () => {
 	if (canRoleIDDo(role_id, "users/index")) {
 		liViewUsers = (
 			<li className="nav-item m">
-				<Link to="/users">Users</Link>
+				<Link to="/users">
+					<button className="btn btn-primary">Users</button>
+				</Link>
 			</li>
 		);
 	}
@@ -27,7 +29,9 @@ export const Navbar = () => {
 	if (canRoleIDDo(role_id, "orders/index")) {
 		liViewOrders = (
 			<li className="nav-item">
-				<Link to="/orders">Orders</Link>
+				<Link to="/orders">
+					<button className="btn btn-primary">Orders</button>
+				</Link>
 			</li>
 		);
 	}
@@ -36,7 +40,7 @@ export const Navbar = () => {
 	if (canRoleIDDo(role_id, "orders/index")) {
 		liLogout = (
 			<li className="nav-item">
-				<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#modal-logout">
+				<button type="button" className="btn btn-dark" data-toggle="modal" data-target="#modal-logout">
 					Logout
 				</button>
 			</li>
@@ -66,7 +70,9 @@ export const Navbar = () => {
 			<div className="col-md-6 offset-md-4 collapse navbar-collapse" id="navbarSupportedContent1">
 				<ul className="navbar-nav ml-auto mt-2 mt-lg-0">
 					{liViewUsers}
+					&nbsp; &nbsp;
 					{liViewOrders}
+					&nbsp; &nbsp;
 					{liLogout}
 				</ul>
 				<ConfirmModal id="modal-logout" body="¿Estas seguro de que quieres cerrar sesión?" confirm={logout} />

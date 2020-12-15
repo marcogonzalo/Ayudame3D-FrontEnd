@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, Fragment } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/users.scss";
 import { UserTr } from "../component/UserTr";
 import { ConfirmModal } from "../component/ConfirmModal";
+import { Context } from "../store/appContext";
+import canRoleIDDo, { isHelper } from "../helpers/UserHelper";
+import { BASE_URL } from "../helpers/UrlHelper";
 
 export const Users = () => {
+	const [loading, setLoading] = useState(true);
 	const [users, setUsers] = useState([]);
+	const { actions, store } = useContext(Context);
 
-	useEffect(() => {
-		fetch("https://3000-c6e3d648-b9dc-4aca-942d-937c30697a99.ws-eu01.gitpod.io/users", {
+	function getUsers() {
+		fetch(BASE_URL + "users", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -20,12 +25,49 @@ export const Users = () => {
 			})
 			.then(responseJson => {
 				setUsers(responseJson);
+				setLoading(false);
 			});
+	}
+
+	useEffect(() => {
+		let accessToken = localStorage.getItem("accessToken");
+		if (store.loggedUser === null) {
+			fetch(BASE_URL + "get-user-authenticated", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + localStorage.getItem("accessToken")
+				}
+			})
+				.then(response => {
+					return response.json();
+				})
+				.then(responseJson => {
+					actions.setLoggedUser(responseJson.user);
+					getUsers();
+				});
+		} else {
+			getUsers();
+		}
 	}, []);
+
+	if (loading) {
+		return "Loading...";
+	}
 
 	const usersHtml = users.map(user => {
 		return <UserTr key={user.id} user={user} />;
 	});
+	let role_id = actions.getLoggedUserRoleID();
+	let buttonCreateUser = "";
+	if (canRoleIDDo(role_id, "users/create")) {
+		buttonCreateUser = (
+			<Link to="/users/create">
+				<button className="btn btn-primary float-left">Create User</button>
+			</Link>
+		);
+	}
+
 	return (
 		<div className="text-center mt-5">
 			<Link to="/users/create">

@@ -3,15 +3,19 @@ import { PropTypes } from "prop-types";
 
 export const SelectFilledAndSelected = props => {
 	let dataHtml = props.data.map(row => {
+		let name = row.name;
+		if (name == "" || name == undefined || name == null) {
+			name = row.full_name;
+		}
 		return (
 			<option key={row.id} value={row.id}>
-				{row.name}
+				{name}
 			</option>
 		);
 	});
 
 	return (
-		<select defaultValue={props.idSelected} className="custom-select mr-sm-2">
+		<select value={props.idSelected} className="custom-select mr-sm-2">
 			<option>Choose...</option>
 			{dataHtml}
 		</select>

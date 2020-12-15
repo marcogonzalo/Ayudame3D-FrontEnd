@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { PropTypes } from "prop-types";
 import canRoleIDDo, { isHelper } from "../helpers/UserHelper";
+import "../../styles/orderTr.scss";
 
 export const OrderTr = props => {
 	const { actions } = useContext(Context);
@@ -26,6 +27,42 @@ export const OrderTr = props => {
 		);
 	}
 
+	let orderStatusColorName = "";
+	if (order.status.name == "Pending") {
+		orderStatusColorName = (
+			<Fragment>
+				<td id="black">{order.status.name}</td>
+			</Fragment>
+		);
+	} else if (order.status.name == "Processing") {
+		orderStatusColorName = (
+			<Fragment>
+				<td id="orange">{order.status.name}</td>
+			</Fragment>
+		);
+	} else if (order.status.name == "Ready") {
+		orderStatusColorName = (
+			<Fragment>
+				<td id="yellow">{order.status.name}</td>
+			</Fragment>
+		);
+	} else if (order.status.name == "Complete") {
+		orderStatusColorName = (
+			<Fragment>
+				<td id="green">{order.status.name}</td>
+			</Fragment>
+		);
+	} else if (order.status.name == "Rejected") {
+		orderStatusColorName = (
+			<Fragment>
+				<td id="red">{order.status.name}</td>
+			</Fragment>
+		);
+	}
+
+	console.log("===========");
+	console.log(order.status.name);
+
 	let conditionalColumns = "";
 	if (!isHelper(role_id)) {
 		conditionalColumns = (
@@ -41,7 +78,12 @@ export const OrderTr = props => {
 	return (
 		<tr>
 			<td>{order.id}</td>
-			<td>{order.status.name}</td>
+
+			{orderStatusColorName}
+
+			{console.log("--------------------")}
+			{console.log(order.status.name)}
+
 			{conditionalColumns}
 			<td>
 				<ul className="list-inline m-0">

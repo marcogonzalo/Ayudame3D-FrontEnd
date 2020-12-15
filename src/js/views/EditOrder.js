@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import "../../styles/editOrder.scss";
 import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
-import { isPending, isProcessing, isReady } from "../helpers/StatusHelper";
+import { isPending, isProcessing, isReady, isCompleted } from "../helpers/StatusHelper";
 import { Context } from "../store/appContext";
 import canRoleIDDo, { isHelper, isManager } from "../helpers/UserHelper";
 import { BASE_URL } from "../helpers/UrlHelper";
@@ -32,9 +32,10 @@ export const EditOrder = () => {
 
 	useEffect(() => {
 		getOrder(id);
+		getHelpers();
 	}, []);
 
-	if (loading) {
+	if (loading || order == null) {
 		return "Loading...";
 	}
 
@@ -63,9 +64,56 @@ export const EditOrder = () => {
 			});
 	}
 
+	function getHelpers() {
+		fetch(BASE_URL + "helpers", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				console.log(response);
+				return response.json();
+			})
+			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+				setHelpers(responseJson);
+				setLoading(false);
+			})
+			.catch(error => {
+				alert("Error:", error);
+			});
+	}
+
 	function fileSelected(event) {
 		let input = event.currentTarget;
 		setFiles(input.files);
+	}
+
+	function fileSelected(event) {
+		let input = event.currentTarget;
+		saveFiles(input.files);
+		event.target.value = null;
+	}
+
+	function saveFiles(files) {
+		const formData = new FormData();
+		for (var i = 0; i < files.length; i++) {
+			formData.append("document" + i, files[i]);
+		}
+		fetch(BASE_URL + "orders/" + order.id + "/save-files", {
+			method: "POST",
+			body: formData,
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => response.json())
+			.then(responseJson => setOrder(responseJson))
+			.catch(error => console.log(error));
 	}
 
 	function setOrderReady() {
@@ -126,6 +174,7 @@ export const EditOrder = () => {
 
 	let divSaveButtons = "";
 	let role_id = actions.getLoggedUserRoleID();
+
 	if (isPending(order.status.id) && isHelper(role_id)) {
 		divSaveButtons = (
 			<div className="col-md-7 mx-auto">
@@ -138,7 +187,7 @@ export const EditOrder = () => {
 	} else if (isProcessing(order.status.id)) {
 		divSaveButtons = (
 			<div className="col-md-7 mx-auto">
-				<span>El gestor debe validar la documentación subida y marcar el el pedido como listo.</span>
+				<span>El gestor debe validar la documentación subida y marcar el pedido como listo.</span>
 			</div>
 		);
 		if (isManager(role_id)) {
@@ -208,7 +257,6 @@ export const EditOrder = () => {
 		if (video == "") {
 			return;
 		}
-		setSavingVideo(true);
 		fetch(BASE_URL + "orders/" + order.id + "/save-video", {
 			method: "POST",
 			headers: {
@@ -277,8 +325,8 @@ export const EditOrder = () => {
 	if (canRoleIDDo(role_id, "orders/changeHelper")) {
 		divHelper = (
 			<div className="form-group row">
-				<label htmlFor="helper" className="col-md-4 col-form-label text-md-right">
-					Helper
+				<label htmlFor="helper" className="col-md-3 col-form-label text-md-right">
+					Helper:
 				</label>
 				<div className="col-md-6">
 					<div className="col-md-6">
@@ -311,6 +359,7 @@ export const EditOrder = () => {
 		orderCloned.documents.splice(position, 1);
 		setOrder(orderCloned);
 	}
+
 	let liDocumentsHtml = order.documents.map(document => {
 		let deleteButtonHtml = "";
 		if (document.user_id == actions.getLoggedUser().id) {
@@ -325,13 +374,15 @@ export const EditOrder = () => {
 				<a href={document.url} target="_blank" rel="noopener noreferrer">
 					{document.name}
 				</a>
+				&nbsp; &nbsp; &nbsp;
 				{deleteButtonHtml}
 			</li>
 		);
 	});
 
+	// direcciones de entrega y recogida==============================================
 	let pickupAddressHtml = "";
-	if (isReady(order.status.id)) {
+	if (isReady(order.status.id) || isCompleted(order.status.id)) {
 		pickupAddressHtml = (
 			<Fragment>
 				<div className="form-group row">
@@ -457,7 +508,7 @@ export const EditOrder = () => {
 						<div className="card-body">
 							<div className="form-group row">
 								<label htmlFor="description" className="col-md-3 col-form-label text-md-right">
-									Description
+									Description :
 								</label>
 								<div className="col-md-9">
 									<input
@@ -481,7 +532,8 @@ export const EditOrder = () => {
 									Documents:
 								</label>
 								{uploadFilesHtml}
-								<div className="col-md-12">
+
+								<div className="col-md-8">
 									<ul>{liDocumentsHtml}</ul>
 								</div>
 							</div>

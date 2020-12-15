@@ -1,37 +1,68 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useEffect, Fragment } from "react";
+import { Link, useParams, useHistory } from "react-router-dom";
 import "../../styles/editUser.scss";
+import { Context } from "../store/appContext";
+import { BASE_URL } from "../helpers/UrlHelper";
+import canRoleIDDo, { isHelper, isManager, isAdmin } from "../helpers/UserHelper";
 import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
 
 export const EditUser = () => {
-	const user = {
-		id: 3,
-		role: {
-			id: 1,
-			name: "Helper"
-		},
-		name: "John Matius",
-		email: "jmatius@gmail.com",
-		phone: "9652356",
-		address: "Calle Valencia",
-		city: "Madrid",
-		country: "España"
-	};
+	const history = useHistory();
+	let { id } = useParams();
+	const { actions } = useContext(Context);
+	const [user, setUser] = useState(null);
+	const [users, setUsers] = useState([]);
+	const [loading, setLoading] = useState(true);
 
-	let roles = [
-		{
-			id: 1,
-			name: "Helper"
-		},
-		{
-			id: 2,
-			name: "Gestor"
-		},
-		{
-			id: 3,
-			name: "Administrator"
-		}
-	];
+	useEffect(() => {
+		getUser(id);
+	}, []);
+
+	if (loading || user == null) {
+		return "Loading...";
+	}
+
+	function getUser(id) {
+		fetch(BASE_URL + "users/" + id, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				console.log(response);
+				return response.json();
+			})
+			.then(responseJson => {
+				console.log(responseJson);
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+				setUser(responseJson);
+				setLoading(false);
+			})
+			.catch(error => {
+				alert("Error:", error);
+			});
+	}
+
+	let divRoleUser = "";
+	let role_id = actions.getLoggedUserRoleID();
+	if (canRoleIDDo(role_id, "users/changeRole")) {
+		divRoleUser = (
+			<div className="form-group row">
+				<label htmlFor="user" className="col-md-4 col-form-label text-md-right">
+					Role
+				</label>
+				<div className="col-md-6">
+					<div className="col-md-6">
+						<SelectFilledAndSelected data={users} idSelected={user.role.id} />
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="container">
@@ -57,15 +88,6 @@ export const EditUser = () => {
 								</div>
 
 								<div className="form-group row">
-									<label htmlFor="user_role" className="col-md-4 col-form-label text-md-right">
-										Role
-									</label>
-									<div className="col-md-6">
-										<SelectFilledAndSelected data={roles} idSelected={user.role.id} />
-									</div>
-								</div>
-
-								<div className="form-group row">
 									<label htmlFor="full_name" className="col-md-4 col-form-label text-md-right">
 										Full Name
 									</label>
@@ -75,10 +97,12 @@ export const EditUser = () => {
 											id="name"
 											className="form-control"
 											name="name"
-											defaultValue={user.name}
+											defaultValue={user.full_name}
 										/>
 									</div>
 								</div>
+
+								{divRoleUser}
 
 								<div className="form-group row">
 									<label htmlFor="email_address" className="col-md-4 col-form-label text-md-right">
@@ -161,6 +185,7 @@ export const EditUser = () => {
 											Save user
 										</button>
 									</Link>
+									&nbsp; &nbsp;
 									<Link to="/users">
 										<button className="btn btn-primary" type="submit" value="submit">
 											Cancel

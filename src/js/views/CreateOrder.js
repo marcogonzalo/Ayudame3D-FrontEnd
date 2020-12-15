@@ -10,6 +10,7 @@ export const CreateOrder = () => {
 	const { actions } = useContext(Context);
 	const [files, setFiles] = useState([]);
 	const [helpers, setHelpers] = useState([]);
+	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [description, setDescription] = useState("");
 	const [helper, setHelper] = useState(0);
@@ -105,20 +106,17 @@ export const CreateOrder = () => {
 			);
 	}
 
-	let statusDivHtml = "";
+	let statusesDivHtml = "";
 	if (canRoleIDDo(role_id, "orders/setStatusManual")) {
-		statusDivHtml = (
+		statusesDivHtml = (
 			<div className="form-group row">
 				<label htmlFor="status" className="col-md-4 col-form-label text-md-right">
 					Status
 				</label>
+
 				<div className="col-md-6">
 					<select defaultValue="0" className="custom-select mr-sm-2" id="inlineFormCustomSelect">
-						<option value="0">Choose...</option>
-						<option value="1">Pending</option>
-						<option value="2">Processing</option>
-						<option value="3">Rejected</option>
-						<option value="4">Completed</option>
+						<option value="0">Pending</option>
 					</select>
 				</div>
 			</div>
@@ -173,7 +171,7 @@ export const CreateOrder = () => {
 								</div>
 							</div>
 
-							{statusDivHtml}
+							{statusesDivHtml}
 
 							<div className="form-group row">
 								<label htmlFor="documents" className="col-md-4 col-form-label text-md-right">
@@ -199,6 +197,7 @@ export const CreateOrder = () => {
 								<button className="btn btn-primary" onClick={createOrder}>
 									Create Order
 								</button>
+								&nbsp; &nbsp;
 								<Link to="/orders">
 									<button className="btn btn-primary">Cancel</button>
 								</Link>

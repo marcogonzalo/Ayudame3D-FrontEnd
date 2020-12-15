@@ -7,7 +7,7 @@ export const Footer = () => {
 
 	return (
 		<footer className="footer mt-auto py-3 text-center">
-			<p>Made by Joseluises</p>
+			<p>Made by JLSA </p>
 			<ConfirmModal id="confirm-modal" body={store.confirmModal.body} confirm={store.confirmModal.confirm} />
 		</footer>
 	);
