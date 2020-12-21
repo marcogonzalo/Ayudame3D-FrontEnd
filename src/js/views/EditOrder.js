@@ -5,10 +5,10 @@ import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
 import { isPending, isProcessing, isReady, isCompleted } from "../helpers/StatusHelper";
 import { Context } from "../store/appContext";
 import canRoleIDDo, { isHelper, isManager } from "../helpers/UserHelper";
-import { BASE_URL } from "../helpers/UrlHelper";
 import { DeleteDocumentButton } from "../component/DeleteDocumentButton";
 
 export const EditOrder = () => {
+	const BASE_URL = process.env.BASE_URL;
 	const history = useHistory();
 	let { id } = useParams();
 	const { actions } = useContext(Context);
@@ -168,6 +168,32 @@ export const EditOrder = () => {
 			});
 	}
 
+	function rejectOrder() {
+		setLoading(true);
+		fetch(BASE_URL + "orders/" + order.id + "/reject", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+				setOrder(responseJson);
+			})
+			.catch(error => {
+				alert("Error:", error);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}
+
 	function haveFilesUploadedForHelper(user_id) {
 		return order.documents.some(document => document.user_id != user_id);
 	}
@@ -181,7 +207,9 @@ export const EditOrder = () => {
 				<button className="btn btn-primary" onClick={acceptOrder}>
 					Aceptar
 				</button>
-				<button className="btn btn-danger">Rechazar</button>
+				<button className="btn btn-danger" onClick={rejectOrder}>
+					Rechazar
+				</button>
 			</div>
 		);
 	} else if (isProcessing(order.status.id)) {

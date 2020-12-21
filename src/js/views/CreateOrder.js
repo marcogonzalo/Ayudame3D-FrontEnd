@@ -3,9 +3,9 @@ import { Link, useHistory } from "react-router-dom";
 import "../../styles/createOrder.scss";
 import canRoleIDDo from "../helpers/UserHelper";
 import { Context } from "../store/appContext";
-import { BASE_URL } from "../helpers/UrlHelper";
 
 export const CreateOrder = () => {
+	const BASE_URL = process.env.BASE_URL;
 	const history = useHistory();
 	const { actions } = useContext(Context);
 	const [files, setFiles] = useState([]);

@@ -3,9 +3,9 @@ import "../../styles/login.scss";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { useHistory } from "react-router-dom";
-import { BASE_URL } from "../helpers/UrlHelper";
 
 export const Login = () => {
+	const BASE_URL = process.env.BASE_URL;
 	const { actions } = useContext(Context);
 	let history = useHistory();
 

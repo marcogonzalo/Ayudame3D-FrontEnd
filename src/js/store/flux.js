@@ -11,8 +11,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getLoggedUserRoleID() {
 				const store = getStore();
 				let user = this.getLoggedUser();
-				if (user !== null && user.role_id) {
-					return user.role_id;
+				if (user !== null && user.role && user.role.id) {
+					return user.role.id;
 				} else {
 					return null;
 				}

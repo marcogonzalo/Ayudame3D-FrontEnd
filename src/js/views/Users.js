@@ -5,9 +5,9 @@ import { UserTr } from "../component/UserTr";
 import { ConfirmModal } from "../component/ConfirmModal";
 import { Context } from "../store/appContext";
 import canRoleIDDo, { isHelper } from "../helpers/UserHelper";
-import { BASE_URL } from "../helpers/UrlHelper";
 
 export const Users = () => {
+	const BASE_URL = process.env.BASE_URL;
 	const [loading, setLoading] = useState(true);
 	const [users, setUsers] = useState([]);
 	const { actions, store } = useContext(Context);

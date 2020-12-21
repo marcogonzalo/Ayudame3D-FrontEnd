@@ -2,11 +2,11 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import "../../styles/editUser.scss";
 import { Context } from "../store/appContext";
-import { BASE_URL } from "../helpers/UrlHelper";
 import canRoleIDDo, { isHelper, isManager, isAdmin } from "../helpers/UserHelper";
 import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
 
 export const EditUser = () => {
+	const BASE_URL = process.env.BASE_URL;
 	const history = useHistory();
 	let { id } = useParams();
 	const { actions } = useContext(Context);

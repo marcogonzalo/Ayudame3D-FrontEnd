@@ -1,8 +1,8 @@
 import React from "react";
 import { PropTypes } from "prop-types";
-import { BASE_URL } from "../helpers/UrlHelper";
 
 export const DeleteDocumentButton = props => {
+	const BASE_URL = process.env.BASE_URL;
 	const { document, onDelete } = props;
 
 	function deleteDocument() {
