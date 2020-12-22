@@ -8,14 +8,16 @@ import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
 export const EditUser = () => {
 	const BASE_URL = process.env.BASE_URL;
 	const history = useHistory();
+
 	let { id } = useParams();
 	const { actions } = useContext(Context);
 	const [user, setUser] = useState(null);
-	const [users, setUsers] = useState([]);
+	const [roles, setRoles] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		getUser(id);
+		getRoles();
 	}, []);
 
 	if (loading || user == null) {
@@ -35,14 +37,40 @@ export const EditUser = () => {
 				return response.json();
 			})
 			.then(responseJson => {
-				console.log(responseJson);
 				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
 					history.push("/");
+					return;
 				}
 				setUser(responseJson);
 				setLoading(false);
 			})
 			.catch(error => {
+				alert("Error:", error);
+			});
+	}
+
+	function getRoles() {
+		fetch(BASE_URL + "roles", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				console.log(response);
+				return response.json();
+			})
+			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+
+				setRoles(responseJson);
+				setLoading(false);
+			})
+			.catch(error => {
+				console.log(error);
 				alert("Error:", error);
 			});
 	}
@@ -57,11 +85,28 @@ export const EditUser = () => {
 				</label>
 				<div className="col-md-6">
 					<div className="col-md-6">
-						<SelectFilledAndSelected data={users} idSelected={user.role.id} />
+						<SelectFilledAndSelected data={roles} idSelected={user.role.id} />
 					</div>
 				</div>
 			</div>
 		);
+	}
+
+	function saveUser() {
+		fetch(BASE_URL + "users/" + user.id, {
+			method: "PUT",
+			body: JSON.stringify(user),
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(
+				response => response.json() // if the response is a JSON object
+			)
+			.then(success => history.push("/users"))
+			.catch(
+				error => console.log(error) // Handle the error response object
+			);
 	}
 
 	return (
@@ -180,11 +225,9 @@ export const EditUser = () => {
 								</div>
 
 								<div className="col-md-6 offset-md-4">
-									<Link to="/users">
-										<button className="btn btn-primary" type="submit" value="submit">
-											Save user
-										</button>
-									</Link>
+									<button className="btn btn-primary" onClick={saveUser}>
+										Save user
+									</button>
 									&nbsp; &nbsp;
 									<Link to="/users">
 										<button className="btn btn-primary" type="submit" value="submit">

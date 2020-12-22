@@ -15,7 +15,7 @@ export const SelectFilledAndSelected = props => {
 	});
 
 	return (
-		<select value={props.idSelected} className="custom-select mr-sm-2">
+		<select defaultValue={props.idSelected} className="custom-select mr-sm-2">
 			<option>Choose...</option>
 			{dataHtml}
 		</select>

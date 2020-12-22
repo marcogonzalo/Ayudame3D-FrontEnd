@@ -8,7 +8,7 @@ export const CreateUser = () => {
 	const BASE_URL = process.env.BASE_URL;
 	const history = useHistory();
 	const { actions } = useContext(Context);
-	const [users, setUsers] = useState([]);
+
 	const [loading, setLoading] = useState(true);
 	const [idUser, setIdUser] = useState("");
 	const [fullName, setFullName] = useState("");
@@ -81,35 +81,8 @@ export const CreateUser = () => {
 				})
 				.then(responseJson => {
 					actions.setLoggedUser(responseJson.user);
-					getUsers();
 				});
-		} else {
-			getUsers();
 		}
-	}
-
-	function getUsers() {
-		fetch(BASE_URL + "users", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: "Bearer " + localStorage.getItem("accessToken")
-			}
-		})
-			.then(response => {
-				console.log(response);
-				return response.json();
-			})
-			.then(responseJson => {
-				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
-					history.push("/");
-				}
-				setUsers(responseJson);
-				setLoading(false);
-			})
-			.catch(error => {
-				alert("Error:", error);
-			});
 	}
 
 	/* ==================*/

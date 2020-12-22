@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "../../styles/users.scss";
 import { UserTr } from "../component/UserTr";
 import { ConfirmModal } from "../component/ConfirmModal";
@@ -11,6 +11,7 @@ export const Users = () => {
 	const [loading, setLoading] = useState(true);
 	const [users, setUsers] = useState([]);
 	const { actions, store } = useContext(Context);
+	const history = useHistory();
 
 	function getUsers() {
 		fetch(BASE_URL + "users", {
@@ -24,6 +25,9 @@ export const Users = () => {
 				return response.json();
 			})
 			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
 				setUsers(responseJson);
 				setLoading(false);
 			});
