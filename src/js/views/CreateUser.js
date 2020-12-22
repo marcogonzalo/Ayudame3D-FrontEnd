@@ -52,7 +52,7 @@ export const CreateUser = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			});
 	}
 

@@ -24,7 +24,7 @@ export const DeleteDocumentButton = props => {
 				}
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			})
 			.finally(() => {
 				onDelete(document.id);
