@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "../../styles/orders.scss";
 import { OrderTr } from "../component/OrderTr";
 import { ConfirmModal } from "../component/ConfirmModal";
@@ -11,6 +11,7 @@ export const Orders = () => {
 	const [loading, setLoading] = useState(true);
 	const [orders, setOrders] = useState([]);
 	const { actions, store } = useContext(Context);
+	const history = useHistory();
 
 	function getOrders() {
 		fetch(BASE_URL + "orders", {
@@ -24,6 +25,10 @@ export const Orders = () => {
 				return response.json();
 			})
 			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+					return;
+				}
 				setOrders(responseJson);
 				setLoading(false);
 			});

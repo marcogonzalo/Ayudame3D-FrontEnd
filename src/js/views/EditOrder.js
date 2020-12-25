@@ -60,7 +60,7 @@ export const EditOrder = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			});
 	}
 
@@ -84,7 +84,7 @@ export const EditOrder = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			});
 	}
 
@@ -135,7 +135,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -161,7 +161,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -187,7 +187,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -274,7 +274,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			})
 			.finally(() => {
 				//TODO Loading
@@ -303,7 +303,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
 			})
 			.finally(() => {
 				setSavingVideo(false);

@@ -8,14 +8,16 @@ import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
 export const EditUser = () => {
 	const BASE_URL = process.env.BASE_URL;
 	const history = useHistory();
+
 	let { id } = useParams();
 	const { actions } = useContext(Context);
 	const [user, setUser] = useState(null);
-	const [users, setUsers] = useState([]);
+	const [roles, setRoles] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		getUser(id);
+		getRoles();
 	}, []);
 
 	if (loading || user == null) {
@@ -35,15 +37,40 @@ export const EditUser = () => {
 				return response.json();
 			})
 			.then(responseJson => {
-				console.log(responseJson);
 				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
 					history.push("/");
+					return;
 				}
 				setUser(responseJson);
 				setLoading(false);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error: " + error);
+			});
+	}
+
+	function getRoles() {
+		fetch(BASE_URL + "roles", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				console.log(response);
+				return response.json();
+			})
+			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+
+				setRoles(responseJson);
+				setLoading(false);
+			})
+			.catch(error => {
+				console.log("Error: " + error);
 			});
 	}
 
@@ -57,11 +84,33 @@ export const EditUser = () => {
 				</label>
 				<div className="col-md-6">
 					<div className="col-md-6">
-						<SelectFilledAndSelected data={users} idSelected={user.role.id} />
+						<SelectFilledAndSelected data={roles} idSelected={user.role.id} onChange={selectRoleChanged} />
 					</div>
 				</div>
 			</div>
 		);
+	}
+
+	function selectRoleChanged(roleIdSelected) {
+		setUser({ ...user, role_id: roleIdSelected });
+	}
+
+	function saveUser() {
+		fetch(BASE_URL + "users/" + user.id, {
+			method: "PUT",
+			body: JSON.stringify({ user: user }),
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(
+				response => response.json() // if the response is a JSON object
+			)
+			.then(responseJson => alert("Usuario guardado correctamente"))
+			.catch(
+				error => console.log(error) // Handle the error response object
+			);
 	}
 
 	return (
@@ -71,128 +120,82 @@ export const EditUser = () => {
 				<div className="col-md-8">
 					<div className="card">
 						<div className="card-body">
-							<form name="my-form">
-								<div className="form-group row">
-									<label htmlFor="nid_number" className="col-md-4 col-form-label text-md-right">
-										<abbr title="Id User">ID</abbr> Number
-									</label>
-									<div className="col-md-6">
-										<input
-											type="text"
-											id="Id"
-											className="form-control"
-											name="Id User"
-											defaultValue={user.id}
-										/>
-									</div>
+							<div className="form-group row">
+								<label htmlFor="nid_number" className="col-md-4 col-form-label text-md-right">
+									<abbr title="Id User">ID</abbr> Number
+								</label>
+								<div className="col-md-6">
+									<input
+										type="text"
+										id="Id"
+										className="form-control"
+										name="Id User"
+										defaultValue={user.id}
+									/>
 								</div>
+							</div>
 
-								<div className="form-group row">
-									<label htmlFor="full_name" className="col-md-4 col-form-label text-md-right">
-										Full Name
-									</label>
-									<div className="col-md-6">
-										<input
-											type="text"
-											id="name"
-											className="form-control"
-											name="name"
-											defaultValue={user.full_name}
-										/>
-									</div>
+							<div className="form-group row">
+								<label htmlFor="full_name" className="col-md-4 col-form-label text-md-right">
+									Full Name
+								</label>
+								<div className="col-md-6">
+									<input
+										type="text"
+										id="name"
+										className="form-control"
+										name="name"
+										defaultValue={user.full_name}
+										onChange={e => setUser({ ...user, full_name: e.target.value })}
+									/>
 								</div>
+							</div>
 
-								{divRoleUser}
+							{divRoleUser}
 
-								<div className="form-group row">
-									<label htmlFor="email_address" className="col-md-4 col-form-label text-md-right">
-										E-Mail Address
-									</label>
-									<div className="col-md-6">
-										<input
-											type="text"
-											id="email"
-											className="form-control"
-											name="email"
-											defaultValue={user.email}
-										/>
-									</div>
+							<div className="form-group row">
+								<label htmlFor="email_address" className="col-md-4 col-form-label text-md-right">
+									E-Mail Address
+								</label>
+								<div className="col-md-6">
+									<input
+										type="text"
+										id="email"
+										className="form-control"
+										name="email"
+										defaultValue={user.email}
+										onChange={e => setUser({ ...user, email: e.target.value })}
+									/>
 								</div>
+							</div>
 
-								<div className="form-group row">
-									<label htmlFor="phone_number" className="col-md-4 col-form-label text-md-right">
-										Phone Number
-									</label>
-									<div className="col-md-6">
-										<input
-											type="text"
-											id="phone"
-											className="form-control"
-											name="phone"
-											defaultValue={user.phone}
-										/>
-									</div>
+							<div className="form-group row">
+								<label htmlFor="phone_number" className="col-md-4 col-form-label text-md-right">
+									Phone Number
+								</label>
+								<div className="col-md-6">
+									<input
+										type="text"
+										id="phone"
+										className="form-control"
+										name="phone"
+										defaultValue={user.phone}
+										onChange={e => setUser({ ...user, phone: e.target.value })}
+									/>
 								</div>
+							</div>
 
-								<div className="form-group row">
-									<label htmlFor="present_address" className="col-md-4 col-form-label text-md-right">
-										Address
-									</label>
-									<div className="col-md-6">
-										<input
-											type="text"
-											id="address"
-											className="form-control"
-											name="address"
-											defaultValue={user.address}
-										/>
-									</div>
-								</div>
-
-								<div className="form-group row">
-									<label htmlFor="city" className="col-md-4 col-form-label text-md-right">
-										City
-									</label>
-									<div className="col-md-6">
-										<input
-											type="text"
-											id="city"
-											className="form-control"
-											name="city"
-											defaultValue={user.city}
-										/>
-									</div>
-								</div>
-
-								<div className="form-group row">
-									<label htmlFor="country" className="col-md-4 col-form-label text-md-right">
-										Country
-									</label>
-									<div className="col-md-6">
-										<input
-											type="text"
-											id="country"
-											className="form-control"
-											name="country"
-											defaultValue={user.country}
-										/>
-									</div>
-								</div>
-
-								<div className="col-md-6 offset-md-4">
-									<Link to="/users">
-										<button className="btn btn-primary" type="submit" value="submit">
-											Save user
-										</button>
-									</Link>
-									&nbsp; &nbsp;
-									<Link to="/users">
-										<button className="btn btn-primary" type="submit" value="submit">
-											Cancel
-										</button>
-									</Link>
-								</div>
-							</form>
+							<div className="col-md-6 offset-md-4">
+								<button className="btn btn-primary" onClick={saveUser}>
+									Save user
+								</button>
+								&nbsp; &nbsp;
+								<Link to="/users">
+									<button className="btn btn-primary" type="submit" value="submit">
+										Cancel
+									</button>
+								</Link>
+							</div>
 						</div>
 					</div>
 				</div>
