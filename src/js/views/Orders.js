@@ -93,8 +93,8 @@ export const Orders = () => {
 				<tbody>
 					<tr>
 						<th>Id Order</th>
-						<th>Status</th>
 						{conditionalColumns}
+						<th>Status</th>
 						<th>Actions</th>
 					</tr>
 					{ordersHtml}

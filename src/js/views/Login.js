@@ -69,7 +69,7 @@ export const Login = () => {
 										required
 										autoFocus
 									/>
-									<label htmlFor="inputEmail" />
+									<label htmlFor="inputEmail">Email</label>
 								</div>
 
 								<div className="form-label-group">
@@ -81,7 +81,7 @@ export const Login = () => {
 										onChange={e => setPassword(e.target.value)}
 										required
 									/>
-									<label htmlFor="inputPassword" />
+									<label htmlFor="inputPassword">Password</label>
 								</div>
 								<div className="d-flex justify-content-around">
 									<div className="custom-control custom-checkbox mb-3">

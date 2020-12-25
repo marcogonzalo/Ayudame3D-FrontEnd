@@ -27,41 +27,38 @@ export const OrderTr = props => {
 		);
 	}
 
-	let orderStatusColorName = "";
+	let orderStatus = "";
 	if (order.status.name == "Pending") {
-		orderStatusColorName = (
+		orderStatus = (
 			<Fragment>
 				<td id="black">{order.status.name}</td>
 			</Fragment>
 		);
 	} else if (order.status.name == "Processing") {
-		orderStatusColorName = (
+		orderStatus = (
 			<Fragment>
 				<td id="orange">{order.status.name}</td>
 			</Fragment>
 		);
 	} else if (order.status.name == "Ready") {
-		orderStatusColorName = (
+		orderStatus = (
 			<Fragment>
 				<td id="yellow">{order.status.name}</td>
 			</Fragment>
 		);
 	} else if (order.status.name == "Complete") {
-		orderStatusColorName = (
+		orderStatus = (
 			<Fragment>
 				<td id="green">{order.status.name}</td>
 			</Fragment>
 		);
 	} else if (order.status.name == "Rejected") {
-		orderStatusColorName = (
+		orderStatus = (
 			<Fragment>
 				<td id="red">{order.status.name}</td>
 			</Fragment>
 		);
 	}
-
-	console.log("===========");
-	console.log(order.status.name);
 
 	let conditionalColumns = "";
 	if (!isHelper(role_id)) {
@@ -78,13 +75,8 @@ export const OrderTr = props => {
 	return (
 		<tr>
 			<td>{order.id}</td>
-
-			{orderStatusColorName}
-
-			{console.log("--------------------")}
-			{console.log(order.status.name)}
-
 			{conditionalColumns}
+			{orderStatus}
 			<td>
 				<ul className="list-inline m-0">
 					<li className="list-inline-item">
