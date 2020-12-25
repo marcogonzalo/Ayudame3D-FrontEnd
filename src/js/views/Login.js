@@ -1,13 +1,12 @@
 import React, { useState, useContext } from "react";
 import "../../styles/login.scss";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { useHistory } from "react-router-dom";
 
 export const Login = () => {
 	const BASE_URL = process.env.BASE_URL;
 	const { actions } = useContext(Context);
-	let history = useHistory();
+	const history = useHistory();
 
 	const [email, setEmail] = useState(null);
 	const [password, setPassword] = useState(null);

@@ -70,7 +70,7 @@ export const CreateOrder = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				alert("Error:", error);
+				console.log("Error:" + error);
 			});
 	}
 
