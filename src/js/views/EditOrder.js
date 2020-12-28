@@ -16,6 +16,7 @@ export const EditOrder = () => {
 	const [helpers, setHelpers] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [statuses, setStatuses] = useState([]);
+	const [helper, setHelper] = useState(0);
 	const [files, setFiles] = useState([]);
 	const [video, setVideo] = useState("");
 	const [savingVideo, setSavingVideo] = useState(false);
@@ -48,11 +49,9 @@ export const EditOrder = () => {
 			}
 		})
 			.then(response => {
-				console.log(response);
 				return response.json();
 			})
 			.then(responseJson => {
-				console.log(responseJson);
 				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
 					history.push("/");
 				}
@@ -73,7 +72,6 @@ export const EditOrder = () => {
 			}
 		})
 			.then(response => {
-				console.log(response);
 				return response.json();
 			})
 			.then(responseJson => {
@@ -358,7 +356,7 @@ export const EditOrder = () => {
 				</label>
 				<div className="col-md-6">
 					<div className="col-md-6">
-						<SelectFilledAndSelected data={helpers} idSelected={order.helper.id} />
+						<SelectFilledAndSelected data={helpers} idSelected={order.helper.id} onChange={setHelper} />
 					</div>
 				</div>
 			</div>
