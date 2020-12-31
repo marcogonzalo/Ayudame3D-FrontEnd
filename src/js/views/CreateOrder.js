@@ -88,7 +88,7 @@ export const CreateOrder = () => {
 			formData.append("document" + i, files[i]);
 		}
 
-		fetch(BASE_URL + "orders/create", {
+		fetch(BASE_URL + "orders", {
 			method: "POST",
 			body: formData,
 			headers: {

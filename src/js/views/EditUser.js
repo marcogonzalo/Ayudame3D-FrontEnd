@@ -57,10 +57,7 @@ export const EditUser = () => {
 				Authorization: "Bearer " + localStorage.getItem("accessToken")
 			}
 		})
-			.then(response => {
-				console.log(response);
-				return response.json();
-			})
+			.then(response => response.json())
 			.then(responseJson => {
 				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
 					history.push("/");
@@ -107,7 +104,10 @@ export const EditUser = () => {
 			.then(
 				response => response.json() // if the response is a JSON object
 			)
-			.then(responseJson => alert("Usuario guardado correctamente"))
+			.then(responseJson => {
+				alert("Usuario guardado correctamente");
+				history.push("/users");
+			})
 			.catch(
 				error => console.log(error) // Handle the error response object
 			);

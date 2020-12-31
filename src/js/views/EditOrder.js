@@ -11,12 +11,13 @@ export const EditOrder = () => {
 	const BASE_URL = process.env.BASE_URL;
 	const history = useHistory();
 	let { id } = useParams();
+
 	const { actions } = useContext(Context);
 	const [order, setOrder] = useState(null);
 	const [helpers, setHelpers] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [statuses, setStatuses] = useState([]);
-	const [helper, setHelper] = useState(0);
+
 	const [files, setFiles] = useState([]);
 	const [video, setVideo] = useState("");
 	const [savingVideo, setSavingVideo] = useState(false);
@@ -71,9 +72,7 @@ export const EditOrder = () => {
 				Authorization: "Bearer " + localStorage.getItem("accessToken")
 			}
 		})
-			.then(response => {
-				return response.json();
-			})
+			.then(response => response.json())
 			.then(responseJson => {
 				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
 					history.push("/");
@@ -84,6 +83,27 @@ export const EditOrder = () => {
 			.catch(error => {
 				console.log("Error: " + error);
 			});
+	}
+
+	function setHelper(value) {
+		const formData = new FormData();
+		formData.append("helper_id", value);
+
+		fetch(BASE_URL + "orders/" + order.id, {
+			method: "PUT",
+			body: formData,
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => response.json())
+			.then(responseJson => {
+				setOrder(responseJson);
+				alert("Order reasigned");
+				history.push("/orders");
+			})
+			.catch(error => console.log(error))
+			.finally(setLoading(false));
 	}
 
 	function fileSelected(event) {
