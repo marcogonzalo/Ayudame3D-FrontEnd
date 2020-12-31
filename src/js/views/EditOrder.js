@@ -163,6 +163,7 @@ export const EditOrder = () => {
 			})
 			.finally(() => {
 				setLoading(false);
+				history.push("/orders");
 			});
 	}
 
@@ -189,6 +190,7 @@ export const EditOrder = () => {
 			})
 			.finally(() => {
 				setLoading(false);
+				history.push("/orders");
 			});
 	}
 
