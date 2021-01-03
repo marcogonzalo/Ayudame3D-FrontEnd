@@ -7,7 +7,7 @@ import "../../styles/orderTr.scss";
 
 export const OrderTr = props => {
 	const { actions } = useContext(Context);
-	const { order } = props;
+	const { order, setLoadingOrder } = props;
 	const BASE_URL = process.env.BASE_URL;
 	function archiveOrder() {
 		actions.askConfirmation("Are you sure?", archiveOrderConfirmed);
@@ -24,7 +24,8 @@ export const OrderTr = props => {
 				return response.json();
 			})
 			.then(responseJson => {
-				console.log(responseJson);
+				console.log("order: ", responseJson.description, ", was deleted");
+				setLoadingOrder(true);
 			});
 	}
 
@@ -110,5 +111,6 @@ export const OrderTr = props => {
 };
 
 OrderTr.propTypes = {
-	order: PropTypes.object
+	order: PropTypes.object,
+	setLoadingOrder: PropTypes.func
 };

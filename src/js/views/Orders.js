@@ -9,6 +9,7 @@ import canRoleIDDo, { isHelper } from "../helpers/UserHelper";
 export const Orders = () => {
 	const BASE_URL = process.env.BASE_URL;
 	const [loading, setLoading] = useState(true);
+	const [loadingOrders, setLoadingOrders] = useState(false);
 	const [orders, setOrders] = useState([]);
 	const { actions, store } = useContext(Context);
 	const history = useHistory();
@@ -31,37 +32,41 @@ export const Orders = () => {
 				}
 				setOrders(responseJson);
 				setLoading(false);
+				setLoadingOrders(false);
 			});
 	}
 
-	useEffect(() => {
-		let accessToken = localStorage.getItem("accessToken");
-		if (store.loggedUser === null) {
-			fetch(BASE_URL + "get-user-authenticated", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: "Bearer " + localStorage.getItem("accessToken")
-				}
-			})
-				.then(response => {
-					return response.json();
+	useEffect(
+		() => {
+			let accessToken = localStorage.getItem("accessToken");
+			if (store.loggedUser === null) {
+				fetch(BASE_URL + "get-user-authenticated", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + localStorage.getItem("accessToken")
+					}
 				})
-				.then(responseJson => {
-					actions.setLoggedUser(responseJson.user);
-					getOrders();
-				});
-		} else {
-			getOrders();
-		}
-	}, []);
+					.then(response => {
+						return response.json();
+					})
+					.then(responseJson => {
+						actions.setLoggedUser(responseJson.user);
+						getOrders();
+					});
+			} else {
+				getOrders();
+			}
+		},
+		[loadingOrders]
+	);
 
 	if (loading) {
 		return "Loading...";
 	}
 
 	const ordersHtml = orders.map(order => {
-		return <OrderTr key={order.id} order={order} />;
+		return <OrderTr key={order.id} order={order} setLoadingOrder={setLoadingOrders} />;
 	});
 
 	let role_id = actions.getLoggedUserRoleID();
