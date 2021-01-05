@@ -1,4 +1,4 @@
-import React, { useContext, Fragment } from "react";
+import React, { useContext, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { PropTypes } from "prop-types";
@@ -7,14 +7,26 @@ import "../../styles/orderTr.scss";
 
 export const OrderTr = props => {
 	const { actions } = useContext(Context);
-	const { order } = props;
-
+	const { order, setLoadingOrder } = props;
+	const BASE_URL = process.env.BASE_URL;
 	function archiveOrder() {
 		actions.askConfirmation("Are you sure?", archiveOrderConfirmed);
 	}
-
 	function archiveOrderConfirmed() {
-		console.log("test");
+		fetch(BASE_URL + "orders/" + props.order.id, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(responseJson => {
+				console.log("order: ", responseJson.description, ", was deleted");
+				setLoadingOrder(true);
+			});
 	}
 
 	let role_id = actions.getLoggedUserRoleID();
@@ -99,5 +111,6 @@ export const OrderTr = props => {
 };
 
 OrderTr.propTypes = {
-	order: PropTypes.object
+	order: PropTypes.object,
+	setLoadingOrder: PropTypes.func
 };
