@@ -7,9 +7,22 @@ import { PropTypes } from "prop-types";
 export const UserTr = props => {
 	const { actions } = useContext(Context);
 	const { user } = props;
+	const BASE_URL = process.env.BASE_URL;
 
 	function archiveUser() {
-		console.log(`Archivariamos el pedido con id ${user.id}`);
+		fetch(BASE_URL + "users/" + user.id, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(responseJson => {
+				console.log("User: ", responseJson.full_name, ", was deleted");
+			});
 	}
 
 	return (
@@ -46,5 +59,5 @@ export const UserTr = props => {
 	);
 };
 UserTr.propTypes = {
-	user: PropTypes.obj
+	user: PropTypes.object
 };
