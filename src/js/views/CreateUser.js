@@ -190,7 +190,7 @@ export const CreateUser = () => {
 								<div className="col-md-6">
 									<input
 										onChange={e => setPasswordUser(e.target.value)}
-										type="text"
+										type="password"
 										id="passwordUser"
 										className="form-control"
 										name="passwordUser"

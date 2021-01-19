@@ -120,13 +120,13 @@ export const EditUser = () => {
 				<div className="col-md-8">
 					<div className="card">
 						<div className="card-body">
-							<div className="form-group row">
+							<div className="form-group row d-none">
 								<label htmlFor="nid_number" className="col-md-4 col-form-label text-md-right">
 									<abbr title="Id User">ID</abbr> Number
 								</label>
 								<div className="col-md-6">
 									<input
-										type="text"
+										type="hidden"
 										id="Id"
 										className="form-control"
 										name="Id User"
