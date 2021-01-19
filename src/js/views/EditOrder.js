@@ -250,7 +250,7 @@ export const EditOrder = () => {
 				);
 			}
 		}
-	} else if (isReady(order.status.id) && isHelper(role_id)) {
+	} else if (isReady(order.status.id) && !isHelper(role_id)) {
 		divSaveButtons = (
 			<div className="col-md-7 mx-auto text-center">
 				<button className="btn btn-primary" onClick={saveAddresses}>
@@ -297,7 +297,8 @@ export const EditOrder = () => {
 				console.log("Error: " + error);
 			})
 			.finally(() => {
-				//TODO Loading
+				setLoading(false);
+				history.push("/orders");
 			});
 	}
 
