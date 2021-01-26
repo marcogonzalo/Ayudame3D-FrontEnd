@@ -89,6 +89,7 @@ export const OrderTr = props => {
 			<td>{order.id}</td>
 			{conditionalColumns}
 			{orderStatus}
+			<td>{order.created_at}</td>
 			<td>
 				<ul className="list-inline m-0">
 					<li className="list-inline-item">
