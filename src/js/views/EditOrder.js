@@ -566,6 +566,7 @@ export const EditOrder = () => {
 										className="form-control"
 										name="description"
 										defaultValue={order.description}
+										readOnly={isHelper(role_id)}
 									/>
 								</div>
 							</div>
