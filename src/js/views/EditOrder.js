@@ -547,7 +547,8 @@ export const EditOrder = () => {
 			</Fragment>
 		);
 	}
-
+	let descriptionClass = "";
+	isHelper(role_id) ? (descriptionClass = "form-control-plaintext") : (descriptionClass = "form-control");
 	return (
 		<div className="container">
 			<h2> Edit Order</h2>
@@ -563,7 +564,7 @@ export const EditOrder = () => {
 									<input
 										type="text"
 										id="description"
-										className="form-control"
+										className={descriptionClass}
 										name="description"
 										defaultValue={order.description}
 										readOnly={isHelper(role_id)}
