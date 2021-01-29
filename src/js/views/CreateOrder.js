@@ -74,19 +74,11 @@ export const CreateOrder = () => {
 			});
 	}
 
-	function fileSelected(event) {
-		let input = event.currentTarget;
-		setFiles(input.files);
-	}
-
 	function createOrder() {
 		const formData = new FormData();
 		formData.append("description", description);
 		formData.append("helper_id", helper);
-
-		for (var i = 0; i < files.length; i++) {
-			formData.append("document" + i, files[i]);
-		}
+		formData.append("files", files);
 
 		fetch(BASE_URL + "orders", {
 			method: "POST",
@@ -175,21 +167,17 @@ export const CreateOrder = () => {
 
 							<div className="form-group row">
 								<label htmlFor="documents" className="col-md-4 col-form-label text-md-right">
-									Documents
+									Documents URL
 								</label>
-								<div className="form-group">
-									<div className="col-sm-9">
-										<span className="btn btn-default ">
-											<input
-												name="document"
-												type="file"
-												className="file"
-												multiple
-												onChange={fileSelected}
-												id="input-file"
-											/>
-										</span>
-									</div>
+								<div className="col-md-6">
+									<input
+										onChange={e => setFiles(e.target.value)}
+										type="text"
+										id="files"
+										className="form-control"
+										name="description"
+										value={files}
+									/>
 								</div>
 							</div>
 

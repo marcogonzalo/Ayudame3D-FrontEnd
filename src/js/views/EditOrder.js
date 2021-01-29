@@ -18,8 +18,8 @@ export const EditOrder = () => {
 	const [loading, setLoading] = useState(true);
 	const [statuses, setStatuses] = useState([]);
 
-	const [files, setFiles] = useState([]);
-	const [video, setVideo] = useState("");
+	const [files, setFiles] = useState("");
+	const [video, setVideo] = useState([]);
 	const [savingVideo, setSavingVideo] = useState(false);
 
 	const [pickupAddress, setPickupAddress] = useState("");
@@ -108,30 +108,37 @@ export const EditOrder = () => {
 
 	function fileSelected(event) {
 		let input = event.currentTarget;
-		setFiles(input.files);
+		setVideo(input.files);
 	}
 
-	function fileSelected(event) {
-		let input = event.currentTarget;
-		saveFiles(input.files);
-		event.target.value = null;
-	}
-
-	function saveFiles(files) {
-		const formData = new FormData();
-		for (var i = 0; i < files.length; i++) {
-			formData.append("document" + i, files[i]);
+	function saveFiles() {
+		if (files == "") {
+			return;
 		}
 		fetch(BASE_URL + "orders/" + order.id + "/save-files", {
 			method: "POST",
-			body: formData,
 			headers: {
+				"Content-Type": "application/json",
 				Authorization: "Bearer " + localStorage.getItem("accessToken")
-			}
+			},
+			body: JSON.stringify({ files: files })
 		})
-			.then(response => response.json())
-			.then(responseJson => setOrder(responseJson))
-			.catch(error => console.log(error));
+			.then(response => {
+				return response.json();
+			})
+			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+				setOrder(responseJson);
+			})
+			.catch(error => {
+				console.log("Error: " + error);
+			})
+			.finally(() => {
+				setSavingVideo(false); // Cambiar
+			});
+		setFiles("");
 	}
 
 	function setOrderReady() {
@@ -303,49 +310,42 @@ export const EditOrder = () => {
 	}
 
 	function saveVideo() {
-		if (video == "") {
-			return;
+		const formData = new FormData();
+		for (var i = 0; i < video.length; i++) {
+			formData.append("video" + i, video[i]);
 		}
 		fetch(BASE_URL + "orders/" + order.id + "/save-video", {
 			method: "POST",
+			body: formData,
 			headers: {
-				"Content-Type": "application/json",
 				Authorization: "Bearer " + localStorage.getItem("accessToken")
-			},
-			body: JSON.stringify({ video: video })
+			}
 		})
-			.then(response => {
-				return response.json();
-			})
-			.then(responseJson => {
-				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
-					history.push("/");
-				}
-				setOrder(responseJson);
-			})
-			.catch(error => {
-				console.log("Error: " + error);
-			})
-			.finally(() => {
-				setSavingVideo(false);
-			});
-		setVideo("");
+			.then(response => response.json())
+			.then(responseJson => setOrder(responseJson))
+			.catch(error => console.log(error));
 	}
 
 	let uploadFilesHtml = "";
 	let uploadVideosHtml = "";
 	if ((isProcessing(order.status.id) || isReady(order.status.id)) && isHelper(role_id)) {
 		uploadFilesHtml = (
-			<div className="col-md-9">
-				<input
-					name="document"
-					type="file"
-					className="form-control file"
-					multiple
-					onChange={fileSelected}
-					id="input-file"
-				/>
-			</div>
+			<>
+				<div className="col-md-6">
+					<input
+						value={files}
+						name="url"
+						type="text"
+						className="form-control"
+						onChange={e => setFiles(e.target.value)}
+					/>
+				</div>
+				<div className="col-md-3">
+					<button className="btn btn-secondary save-btn" onClick={saveFiles}>
+						Save URL
+					</button>
+				</div>
+			</>
 		);
 		uploadVideosHtml = (
 			<div className="form-group row">
@@ -354,15 +354,16 @@ export const EditOrder = () => {
 				</label>
 				<div className="col-md-6">
 					<input
-						value={video}
-						name="url"
-						type="text"
-						className="form-control"
-						onChange={e => setVideo(e.target.value)}
+						name="video"
+						type="file"
+						className="form-control file"
+						multiple
+						onChange={fileSelected}
+						id="input-file"
 					/>
 				</div>
 				<div className="col-md-3">
-					<button disabled={savingVideo} className="btn btn-secondary" onClick={saveVideo}>
+					<button disabled={savingVideo} className="btn btn-secondary save-btn" onClick={saveVideo}>
 						Save video
 					</button>
 				</div>
@@ -567,7 +568,6 @@ export const EditOrder = () => {
 										className={descriptionClass}
 										name="description"
 										defaultValue={order.description}
-										readOnly={isHelper(role_id)}
 									/>
 								</div>
 							</div>
@@ -580,7 +580,7 @@ export const EditOrder = () => {
 
 							<div className="form-group row">
 								<label htmlFor="email_address" className="col-md-3 col-form-label text-md-right">
-									Documents:
+									Documents URL:
 								</label>
 								{uploadFilesHtml}
 
