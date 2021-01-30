@@ -407,16 +407,14 @@ export const EditOrder = () => {
 	}
 
 	let liDocumentsHtml = order.documents.map(document => {
-		let disabled = true;
-		let color = "text-danger";
-		document.user_id == actions.getLoggedUser().id
-			? (disabled = false)
-			: ((disabled = true), (color = "text-secondary"));
+		let visibility = "";
+
+		document.user_id == actions.getLoggedUser().id ? (visibility = "visible") : (visibility = "invisible");
 
 		return (
 			<span key={document.id} className="mb-1">
-				<DeleteDocumentButton disabled={disabled} document={document} onDelete={deleteDocument}>
-					<i className={`fas fa-minus-square fa-2x ${color}`} />
+				<DeleteDocumentButton visibility={visibility} document={document} onDelete={deleteDocument}>
+					<i className="fas fa-minus-square fa-2x text-danger" />
 				</DeleteDocumentButton>
 				<a href={document.url} className="ml-2" target="_blank" rel="noopener noreferrer">
 					{document.name}
