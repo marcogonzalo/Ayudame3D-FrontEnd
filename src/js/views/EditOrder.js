@@ -106,7 +106,7 @@ export const EditOrder = () => {
 			.finally(setLoading(false));
 	}
 
-	function fileSelected(event) {
+	function handleVideoSelection(event) {
 		let input = event.currentTarget;
 		setVideo(input.files);
 	}
@@ -257,11 +257,12 @@ export const EditOrder = () => {
 				);
 			}
 		}
-	} else if (isReady(order.status.id) && !isHelper(role_id)) {
+	} else if (isReady(order.status.id) && isHelper(role_id)) {
 		divSaveButtons = (
 			<div className="col-md-7 mx-auto text-center">
+				<h4>¿Has enviado el formulario?</h4>
 				<button className="btn btn-primary" onClick={saveAddresses}>
-					Guardar direcciones!
+					¡Avisar al equipo!
 				</button>
 			</div>
 		);
@@ -328,7 +329,7 @@ export const EditOrder = () => {
 
 	let uploadFilesHtml = "";
 	let uploadVideosHtml = "";
-	if ((isProcessing(order.status.id) || isReady(order.status.id)) && isHelper(role_id)) {
+	if (isProcessing(order.status.id) && isHelper(role_id)) {
 		uploadFilesHtml = (
 			<>
 				<div className="col-md-6">
@@ -358,7 +359,7 @@ export const EditOrder = () => {
 						type="file"
 						className="form-control file"
 						multiple
-						onChange={fileSelected}
+						onChange={handleVideoSelection}
 						id="input-file"
 					/>
 				</div>
@@ -409,7 +410,9 @@ export const EditOrder = () => {
 	let liDocumentsHtml = order.documents.map(document => {
 		let visibility = "";
 
-		document.user_id == actions.getLoggedUser().id ? (visibility = "visible") : (visibility = "invisible");
+		document.user_id == actions.getLoggedUser().id || !isHelper(role_id)
+			? (visibility = "visible")
+			: (visibility = "invisible");
 
 		return (
 			<span key={document.id} className="mb-1">
@@ -424,128 +427,26 @@ export const EditOrder = () => {
 	});
 
 	// direcciones de entrega y recogida==============================================
-	let pickupAddressHtml = "";
-	if (isReady(order.status.id) || isCompleted(order.status.id)) {
+	let pickupAddressHtml;
+	if (isReady(order.status.id) && isHelper(role_id)) {
 		pickupAddressHtml = (
-			<Fragment>
-				<div className="form-group row">
-					<label className="col-md-12 col-form-label">Dirección de recogida</label>
-					<label htmlFor="pickup-address" className="col-md-3 col-form-label text-md-right">
-						Dirección
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_pickup !== undefined ? order.address_pickup.address : ""}
-							type="text"
-							className="form-control"
-							name="pickup-address"
-							placeholder="Address"
-							onChange={e => setPickupAddress(e.target.value)}
-						/>
-					</div>
-					<label htmlFor="pickup-address" className="col-md-3 col-form-label text-md-right">
-						City
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_pickup !== undefined ? order.address_pickup.city : ""}
-							type="text"
-							className="form-control"
-							name="pickup-City"
-							placeholder="City"
-							onChange={e => setPickupCity(e.target.value)}
-						/>
-					</div>
-					<label htmlFor="pickup-address" className="col-md-3 col-form-label text-md-right">
-						Country
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_pickup !== undefined ? order.address_pickup.country : ""}
-							type="text"
-							className="form-control"
-							name="pickup-Country"
-							placeholder="Country"
-							onChange={e => setPickupCountry(e.target.value)}
-						/>
-					</div>
-					<label htmlFor="pickup-address" className="col-md-3 col-form-label text-md-right">
-						CP
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_pickup !== undefined ? order.address_pickup.cp : ""}
-							type="text"
-							className="form-control"
-							name="pickup-CP"
-							placeholder="CP"
-							onChange={e => setPickupCP(e.target.value)}
-						/>
-					</div>
-				</div>
-				<div className="form-group row">
-					<label className="col-md-12 col-form-label">Dirección de envío</label>
-					<label htmlFor="delivery-address" className="col-md-3 col-form-label text-md-right">
-						Dirección
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_delivery !== undefined ? order.address_delivery.address : ""}
-							type="text"
-							className="form-control"
-							name="delivery-address"
-							placeholder="Address"
-							onChange={e => setDeliveryAddress(e.target.value)}
-						/>
-					</div>
-					<label htmlFor="delivery-City" className="col-md-3 col-form-label text-md-right">
-						City
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_delivery !== undefined ? order.address_delivery.city : ""}
-							type="text"
-							className="form-control"
-							name="delivery-City"
-							placeholder="City"
-							onChange={e => setDeliveryCity(e.target.value)}
-						/>
-					</div>
-					<label htmlFor="delivery-Country" className="col-md-3 col-form-label text-md-right">
-						Country
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_delivery !== undefined ? order.address_delivery.country : ""}
-							type="text"
-							className="form-control"
-							name="delivery-Country"
-							placeholder="Country"
-							onChange={e => setDeliveryCountry(e.target.value)}
-						/>
-					</div>
-					<label htmlFor="delivery-CP" className="col-md-3 col-form-label text-md-right">
-						CP
-					</label>
-					<div className="col-md-9">
-						<input
-							defaultValue={order.address_delivery !== undefined ? order.address_delivery.cp : ""}
-							type="text"
-							className="form-control"
-							name="delivery-CP"
-							placeholder="CP"
-							onChange={e => setDeliveryCP(e.target.value)}
-						/>
-					</div>
-				</div>
-			</Fragment>
+			<iframe
+				src="https://docs.google.com/forms/d/e/1FAIpQLSfaUth4_hhjTopk594-ia6RVkkq2Fq9mcRRhAq8ggW0SbBMgA/viewform?embedded=true"
+				width="100%"
+				height="400"
+				frameBorder="0"
+				marginHeight="0"
+				marginWidth="0"
+				style={{ "margin-bottom": "25px", border: "thin solid silver" }}>
+				Cargando el formulario de recogida...
+			</iframe>
 		);
 	}
 	let descriptionClass = "";
 	isHelper(role_id) ? (descriptionClass = "form-control-plaintext") : (descriptionClass = "form-control");
 	return (
 		<div className="container">
-			<h2> Edit Order</h2>
+			<h1> Edit Order</h1>
 			<div className="row justify-content-center">
 				<div className="col-md-8">
 					<div className="card">
@@ -583,6 +484,7 @@ export const EditOrder = () => {
 								</label>
 								<div className="col-md-6 d-flex flex-column">{liDocumentsHtml}</div>
 							</div>
+
 							{pickupAddressHtml}
 
 							{divSaveButtons}

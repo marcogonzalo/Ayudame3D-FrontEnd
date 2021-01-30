@@ -115,7 +115,7 @@ export const EditUser = () => {
 
 	return (
 		<div className="container">
-			<h2> Edit User</h2>
+			<h1> Edit User</h1>
 			<div className="row justify-content-center">
 				<div className="col-md-8">
 					<div className="card">
