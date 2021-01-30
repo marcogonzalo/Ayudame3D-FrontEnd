@@ -379,9 +379,7 @@ export const EditOrder = () => {
 					Helper:
 				</label>
 				<div className="col-md-6">
-					<div className="col-md-6">
-						<SelectFilledAndSelected data={helpers} idSelected={order.helper.id} onChange={setHelper} />
-					</div>
+					<SelectFilledAndSelected data={helpers} idSelected={order.helper.id} onChange={setHelper} />
 				</div>
 			</div>
 		);
@@ -391,13 +389,11 @@ export const EditOrder = () => {
 	if (canRoleIDDo(role_id, "orders/setStatusManual")) {
 		divStatus = (
 			<div className="form-group row">
-				<label htmlFor="user_rol" className="col-md-4 col-form-label text-md-right">
-					Status
+				<label htmlFor="user_rol" className="col-md-3 col-form-label text-md-right">
+					Status:
 				</label>
 				<div className="col-md-6">
-					<div className="col-md-6">
-						<SelectFilledAndSelected data={statuses} idSelected={order.status.id} />
-					</div>
+					<SelectFilledAndSelected data={statuses} idSelected={order.status.id} />
 				</div>
 			</div>
 		);
@@ -411,22 +407,19 @@ export const EditOrder = () => {
 	}
 
 	let liDocumentsHtml = order.documents.map(document => {
-		let deleteButtonHtml = "";
-		if (document.user_id == actions.getLoggedUser().id) {
-			deleteButtonHtml = (
-				<DeleteDocumentButton document={document} onDelete={deleteDocument}>
-					Delete
-				</DeleteDocumentButton>
-			);
-		}
+		let visibility = "";
+
+		document.user_id == actions.getLoggedUser().id ? (visibility = "visible") : (visibility = "invisible");
+
 		return (
-			<li key={document.id}>
-				<a href={document.url} target="_blank" rel="noopener noreferrer">
+			<span key={document.id} className="mb-1">
+				<DeleteDocumentButton visibility={visibility} document={document} onDelete={deleteDocument}>
+					<i className="fas fa-minus-square fa-2x text-danger" />
+				</DeleteDocumentButton>
+				<a href={document.url} className="ml-2" target="_blank" rel="noopener noreferrer">
 					{document.name}
 				</a>
-				&nbsp; &nbsp; &nbsp;
-				{deleteButtonHtml}
-			</li>
+			</span>
 		);
 	});
 
@@ -583,12 +576,13 @@ export const EditOrder = () => {
 									Documents URL:
 								</label>
 								{uploadFilesHtml}
-
-								<div className="col-md-8">
-									<ul>{liDocumentsHtml}</ul>
-								</div>
 							</div>
-
+							<div className="form-group row">
+								<label htmlFor="email_address" className="col-md-3 col-form-label text-md-right">
+									Existing Files:
+								</label>
+								<div className="col-md-6 d-flex flex-column">{liDocumentsHtml}</div>
+							</div>
 							{pickupAddressHtml}
 
 							{divSaveButtons}
