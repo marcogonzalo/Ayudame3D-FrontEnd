@@ -32,7 +32,7 @@ export const DeleteDocumentButton = props => {
 	}
 
 	return (
-		<button type="button" className="btn btn-danger btn-sm" onClick={deleteDocument}>
+		<button type="button" disabled={props.disabled} className="btn btn-sm p-0" onClick={deleteDocument}>
 			{props.children}
 		</button>
 	);
@@ -41,5 +41,6 @@ export const DeleteDocumentButton = props => {
 DeleteDocumentButton.propTypes = {
 	document: PropTypes.object,
 	children: PropTypes.node.isRequired,
-	onDelete: PropTypes.func
+	onDelete: PropTypes.func,
+	disabled: PropTypes.bool
 };
