@@ -270,27 +270,12 @@ export const EditOrder = () => {
 
 	function saveAddresses() {
 		//TODO Loading
-		let data = {
-			delivery: {
-				address: deliveryAddress,
-				city: deliveryCity,
-				country: deliveryCountry,
-				CP: deliveryCP
-			},
-			pickup: {
-				address: pickupAddress,
-				city: pickupCity,
-				country: pickupCountry,
-				CP: pickupCP
-			}
-		};
 		fetch(BASE_URL + "orders/" + order.id + "/addresses/save", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: "Bearer " + localStorage.getItem("accessToken")
-			},
-			body: JSON.stringify(data)
+			}
 		})
 			.then(response => {
 				return response.json();
@@ -430,20 +415,34 @@ export const EditOrder = () => {
 	let pickupAddressHtml;
 	if (isReady(order.status.id) && isHelper(role_id)) {
 		pickupAddressHtml = (
-			<iframe
-				src="https://docs.google.com/forms/d/e/1FAIpQLSfaUth4_hhjTopk594-ia6RVkkq2Fq9mcRRhAq8ggW0SbBMgA/viewform?embedded=true"
-				width="100%"
-				height="400"
-				frameBorder="0"
-				marginHeight="0"
-				marginWidth="0"
-				style={{ "margin-bottom": "25px", border: "thin solid silver" }}>
-				Cargando el formulario de recogida...
-			</iframe>
+			<Fragment>
+				<h2>Dirección de recogida</h2>
+				<div className="">
+					<p>
+						En el siguiente vídeo encontrarás cómo preparar el envío:{" "}
+						<a href="https://youtu.be/fGFLQlRpeQI" target="_blank" rel="noopener noreferrer">
+							https://youtu.be/fGFLQlRpeQI
+						</a>
+					</p>
+					<p>
+						Finalmente, rellena por favor el siguiente formulario para definir día y hora de recogida en la
+						dirección que mejor te venga:
+					</p>
+				</div>
+				<iframe
+					src="https://docs.google.com/forms/d/e/1FAIpQLSfaUth4_hhjTopk594-ia6RVkkq2Fq9mcRRhAq8ggW0SbBMgA/viewform?embedded=true"
+					width="100%"
+					height="400"
+					frameBorder="0"
+					marginHeight="0"
+					marginWidth="0"
+					style={{ "margin-bottom": "25px", border: "thin solid silver" }}>
+					Cargando el formulario de recogida...
+				</iframe>
+			</Fragment>
 		);
 	}
-	let descriptionClass = "";
-	isHelper(role_id) ? (descriptionClass = "form-control-plaintext") : (descriptionClass = "form-control");
+	const descriptionClass = isHelper(role_id) ? "form-control-plaintext" : "form-control";
 	return (
 		<div className="container">
 			<h1> Edit Order</h1>
