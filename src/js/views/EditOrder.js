@@ -18,6 +18,7 @@ export const EditOrder = () => {
 	const [helperAssigned, setHelperAssigned] = useState();
 	const [loading, setLoading] = useState(true);
 	const [statuses, setStatuses] = useState([]);
+	const [status, setStatus] = useState([]);
 
 	const [files, setFiles] = useState("");
 	const [video, setVideo] = useState([]);
@@ -36,6 +37,7 @@ export const EditOrder = () => {
 	useEffect(() => {
 		getOrder(id);
 		getHelpers();
+		getStatus();
 	}, []);
 
 	if (loading || order == null) {
@@ -101,12 +103,53 @@ export const EditOrder = () => {
 				.then(response => response.json())
 				.then(responseJson => {
 					setOrder(responseJson);
-					alert("Order reasigned");
+					alert("Orden reasignada");
 					history.push("/orders");
 				})
 				.catch(error => console.log(error))
 				.finally(setLoading(false));
 		}
+	}
+
+	function getStatus() {
+		fetch(BASE_URL + "status", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => response.json())
+			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+				setStatuses(responseJson.slice(1));
+				setLoading(false);
+			})
+			.catch(error => {
+				console.log("Error: " + error);
+			});
+	}
+
+	function changeStatus() {
+		switch (parseInt(status)) {
+			case 2:
+				rejectOrder();
+				break;
+			case 3:
+				acceptOrder();
+				break;
+			case 4:
+				setOrderReady();
+				break;
+			case 5:
+				setOrderApproved();
+				break;
+			default:
+				break;
+		}
+		alert("Status Cambiado");
 	}
 
 	function handleVideoSelection(event) {
@@ -391,7 +434,16 @@ export const EditOrder = () => {
 					Status:
 				</label>
 				<div className="col-md-6">
-					<SelectFilledAndSelected data={statuses} idSelected={order.status.id} />
+					<SelectFilledAndSelected
+						data={statuses}
+						idSelected={order.status.id}
+						onChange={status => setStatus(status)}
+					/>
+				</div>
+				<div className="col-md-3">
+					<button disabled={savingVideo} className="btn btn-secondary save-btn" onClick={changeStatus}>
+						Cambiar
+					</button>
 				</div>
 			</div>
 		);
