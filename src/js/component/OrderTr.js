@@ -58,7 +58,7 @@ export const OrderTr = props => {
 				<td id="yellow">{order.status.name}</td>
 			</Fragment>
 		);
-	} else if (order.status.name == "Complete") {
+	} else if (order.status.name == "Approved") {
 		orderStatus = (
 			<Fragment>
 				<td id="green">{order.status.name}</td>

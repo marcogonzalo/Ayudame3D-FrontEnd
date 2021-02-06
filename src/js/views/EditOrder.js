@@ -159,6 +159,32 @@ export const EditOrder = () => {
 			});
 	}
 
+	function setOrderApproved() {
+		setLoading(true);
+		fetch(BASE_URL + "orders/" + order.id + "/set-approved", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + localStorage.getItem("accessToken")
+			}
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(responseJson => {
+				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
+					history.push("/");
+				}
+				setOrder(responseJson);
+			})
+			.catch(error => {
+				console.log("Error: " + error);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}
+
 	function acceptOrder() {
 		setLoading(true);
 		fetch(BASE_URL + "orders/" + order.id + "/accept", {
@@ -215,7 +241,7 @@ export const EditOrder = () => {
 	function userUploadedFiles() {
 		return order.documents.some(document => document.user_id == loggedUser.id);
 	}
-	function haveFilesBeenUploadedForHelper() {
+	function helperUploadedFiles() {
 		return order.documents.some(document => document.user_id != loggedUser.id);
 	}
 
@@ -249,23 +275,51 @@ export const EditOrder = () => {
 				</div>
 			);
 		} else {
-			if (haveFilesBeenUploadedForHelper()) {
+			if (!helperUploadedFiles()) {
 				divSaveButtons = (
 					<div className="col-md-7 mx-auto">
-						<span>{`Esperando a que ${
-							order.helper.full_name
-						} suba la documentación y marque la orden como lista.`}</span>
+						<span>
+							Esperando a que
+							<strong> {order.helper.full_name} </strong>
+							suba la documentación y marque la orden como lista.
+						</span>
+					</div>
+				);
+			} else {
+				divSaveButtons = (
+					<div className="col-md-7 mx-auto">
+						<span>
+							Esperando a que
+							<strong> {order.helper.full_name} </strong>
+							marque la orden como lista.
+						</span>
 					</div>
 				);
 			}
 		}
-	} else if (isReady(order.status.id) && isHelper(role_id)) {
+	} else if (isReady(order.status.id)) {
+		if (isHelper(role_id)) {
+			divSaveButtons = (
+				<div className="col-md-7 mx-auto text-center">
+					<h4>¿Has enviado el formulario?</h4>
+					<button className="btn btn-primary" onClick={saveAddresses}>
+						¡Avisar al equipo!
+					</button>
+				</div>
+			);
+		} else {
+			divSaveButtons = (
+				<div className="col-md-7 mx-auto text-center">
+					<button className="btn btn-primary" onClick={setOrderApproved}>
+						Marcar como Aprobada
+					</button>
+				</div>
+			);
+		}
+	} else if (isApproved(order.status.id)) {
 		divSaveButtons = (
-			<div className="col-md-7 mx-auto text-center">
-				<h4>¿Has enviado el formulario?</h4>
-				<button className="btn btn-primary" onClick={saveAddresses}>
-					¡Avisar al equipo!
-				</button>
+			<div className="col-md-7 mx-auto text-center text-success">
+				<span>¡Esta orden ha sido aprobada!</span>
 			</div>
 		);
 	}
@@ -397,7 +451,7 @@ export const EditOrder = () => {
 	let liDocumentsHtml = order.documents.map(document => {
 		let visibility = "";
 
-		document.user_id == actions.getLoggedUser().id || !isHelper(role_id)
+		!isApproved(order.status.id) && (document.user_id == loggedUser.id || !isHelper(role_id))
 			? (visibility = "visible")
 			: (visibility = "invisible");
 
@@ -438,13 +492,13 @@ export const EditOrder = () => {
 					frameBorder="0"
 					marginHeight="0"
 					marginWidth="0"
-					style={{ "margin-bottom": "25px", border: "thin solid silver" }}>
+					style={{ marginBottom: "25px", border: "thin solid silver" }}>
 					Cargando el formulario de recogida...
 				</iframe>
 			</Fragment>
 		);
 	}
-	const descriptionClass = isHelper(role_id) ? "form-control-plaintext" : "form-control";
+	const descriptionStyle = isHelper(role_id) ? "form-control-plaintext" : "form-control";
 	return (
 		<div className="container">
 			<h1> Edit Order</h1>
@@ -460,7 +514,7 @@ export const EditOrder = () => {
 									<input
 										type="text"
 										id="description"
-										className={descriptionClass}
+										className={descriptionStyle}
 										name="description"
 										defaultValue={order.description}
 									/>
