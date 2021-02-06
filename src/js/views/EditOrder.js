@@ -2,9 +2,9 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import "../../styles/editOrder.scss";
 import { SelectFilledAndSelected } from "../component/SelectFilledAndSelected";
-import { isPending, isProcessing, isReady, isCompleted } from "../helpers/StatusHelper";
+import { isPending, isProcessing, isReady, isApproved } from "../helpers/StatusHelper";
 import { Context } from "../store/appContext";
-import canRoleIDDo, { isHelper, isManager } from "../helpers/UserHelper";
+import canRoleIDDo, { isHelper, isManager, isAdmin } from "../helpers/UserHelper";
 import { DeleteDocumentButton } from "../component/DeleteDocumentButton";
 
 export const EditOrder = () => {
@@ -22,15 +22,7 @@ export const EditOrder = () => {
 	const [video, setVideo] = useState([]);
 	const [savingVideo, setSavingVideo] = useState(false);
 
-	const [pickupAddress, setPickupAddress] = useState("");
-	const [pickupCity, setPickupCity] = useState("");
-	const [pickupCountry, setPickupCountry] = useState("");
-	const [pickupCP, setPickupCP] = useState("");
-
-	const [deliveryAddress, setDeliveryAddress] = useState("");
-	const [deliveryCity, setDeliveryCity] = useState("");
-	const [deliveryCountry, setDeliveryCountry] = useState("");
-	const [deliveryCP, setDeliveryCP] = useState("");
+	const loggedUser = actions.getLoggedUser();
 
 	useEffect(() => {
 		getOrder(id);
@@ -220,9 +212,11 @@ export const EditOrder = () => {
 				history.push("/orders");
 			});
 	}
-
-	function haveFilesUploadedForHelper(user_id) {
-		return order.documents.some(document => document.user_id != user_id);
+	function userUploadedFiles() {
+		return order.documents.some(document => document.user_id == loggedUser.id);
+	}
+	function haveFilesBeenUploadedForHelper() {
+		return order.documents.some(document => document.user_id != loggedUser.id);
 	}
 
 	let divSaveButtons = "";
@@ -240,19 +234,27 @@ export const EditOrder = () => {
 			</div>
 		);
 	} else if (isProcessing(order.status.id)) {
-		divSaveButtons = (
-			<div className="col-md-7 mx-auto">
-				<span>El gestor debe validar la documentación subida y marcar el pedido como listo.</span>
-			</div>
-		);
-		if (isManager(role_id)) {
-			let user = actions.getLoggedUser();
-			if (haveFilesUploadedForHelper(user.id)) {
+		if (isHelper(role_id) && !userUploadedFiles()) {
+			divSaveButtons = (
+				<div className="col-md-7 mx-auto">
+					<span>Añadir los archivos para marcar la orden como lista.</span>
+				</div>
+			);
+		} else if (isHelper(role_id) && userUploadedFiles()) {
+			divSaveButtons = (
+				<div className="col-md-7 mx-auto text-center">
+					<button className="btn btn-primary" onClick={setOrderReady}>
+						Marcar como Lista
+					</button>
+				</div>
+			);
+		} else {
+			if (haveFilesBeenUploadedForHelper()) {
 				divSaveButtons = (
-					<div className="col-md-7 mx-auto text-center">
-						<button className="btn btn-primary" onClick={setOrderReady}>
-							Set Order Ready!
-						</button>
+					<div className="col-md-7 mx-auto">
+						<span>{`Esperando a que ${
+							order.helper.full_name
+						} suba la documentación y marque la orden como lista.`}</span>
 					</div>
 				);
 			}
