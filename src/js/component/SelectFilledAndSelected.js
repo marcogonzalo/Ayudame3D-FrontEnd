@@ -14,10 +14,6 @@ export const SelectFilledAndSelected = props => {
 		);
 	});
 
-	function hola(e) {
-		console.log(e);
-	}
-
 	return (
 		<select
 			defaultValue={props.idSelected}

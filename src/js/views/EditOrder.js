@@ -15,6 +15,7 @@ export const EditOrder = () => {
 	const { actions } = useContext(Context);
 	const [order, setOrder] = useState(null);
 	const [helpers, setHelpers] = useState([]);
+	const [helperAssigned, setHelperAssigned] = useState();
 	const [loading, setLoading] = useState(true);
 	const [statuses, setStatuses] = useState([]);
 
@@ -85,25 +86,27 @@ export const EditOrder = () => {
 			});
 	}
 
-	function setHelper(value) {
-		const formData = new FormData();
-		formData.append("helper_id", value);
+	function setHelper() {
+		if (helperAssigned) {
+			const formData = new FormData();
+			formData.append("helper_id", helperAssigned);
 
-		fetch(BASE_URL + "orders/" + order.id, {
-			method: "PUT",
-			body: formData,
-			headers: {
-				Authorization: "Bearer " + localStorage.getItem("accessToken")
-			}
-		})
-			.then(response => response.json())
-			.then(responseJson => {
-				setOrder(responseJson);
-				alert("Order reasigned");
-				history.push("/orders");
+			fetch(BASE_URL + "orders/" + order.id, {
+				method: "PUT",
+				body: formData,
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("accessToken")
+				}
 			})
-			.catch(error => console.log(error))
-			.finally(setLoading(false));
+				.then(response => response.json())
+				.then(responseJson => {
+					setOrder(responseJson);
+					alert("Order reasigned");
+					history.push("/orders");
+				})
+				.catch(error => console.log(error))
+				.finally(setLoading(false));
+		}
 	}
 
 	function handleVideoSelection(event) {
@@ -365,7 +368,16 @@ export const EditOrder = () => {
 					Helper:
 				</label>
 				<div className="col-md-6">
-					<SelectFilledAndSelected data={helpers} idSelected={order.helper.id} onChange={setHelper} />
+					<SelectFilledAndSelected
+						data={helpers}
+						idSelected={order.helper.id}
+						onChange={helper => setHelperAssigned(helper)}
+					/>
+				</div>
+				<div className="col-md-3">
+					<button disabled={savingVideo} className="btn btn-secondary save-btn" onClick={setHelper}>
+						Reasignar
+					</button>
 				</div>
 			</div>
 		);
