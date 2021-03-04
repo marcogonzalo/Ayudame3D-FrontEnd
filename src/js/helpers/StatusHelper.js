@@ -14,6 +14,6 @@ export function isReady(status_id) {
 	return status_id === 4;
 }
 
-export function isCompleted(status_id) {
+export function isApproved(status_id) {
 	return status_id === 5;
 }
