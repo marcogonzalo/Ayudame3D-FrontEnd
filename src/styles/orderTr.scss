@@ -1,25 +1,30 @@
-#black {
+.pending {
   color: black;
   font-weight: bold;
   
 }
 
-#orange {
+.processing {
   color: orange;
   font-weight: bold;
 }
 
-#yellow {
+.ready {
   color: blue;
   font-weight: bold;
 }
 
-#green {
+.approved {
   color: green;
   font-weight: bold;
 }
 
-#red {
+.rejected {
   color: red;
+  font-weight: bold;
+}
+
+.completed {
+  color: #a0a0a0;
   font-weight: bold;
 }

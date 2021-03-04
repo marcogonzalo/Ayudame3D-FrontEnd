@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { PropTypes } from "prop-types";
 import canRoleIDDo, { isHelper } from "../helpers/UserHelper";
+import { isPending, isProcessing, isReady, isRejected, isApproved, isCompleted } from "../helpers/StatusHelper";
 import "../../styles/orderTr.scss";
 
 export const OrderTr = props => {
@@ -40,34 +41,40 @@ export const OrderTr = props => {
 	}
 
 	let orderStatus = "";
-	if (order.status.name == "Pending") {
+	if (isPending(order.status.id)) {
 		orderStatus = (
 			<Fragment>
-				<td id="black">{order.status.name}</td>
+				<td className="pending">{order.status.name}</td>
 			</Fragment>
 		);
-	} else if (order.status.name == "Processing") {
+	} else if (isProcessing(order.status.id)) {
 		orderStatus = (
 			<Fragment>
-				<td id="orange">{order.status.name}</td>
+				<td className="processing">{order.status.name}</td>
 			</Fragment>
 		);
-	} else if (order.status.name == "Ready") {
+	} else if (isReady(order.status.id)) {
 		orderStatus = (
 			<Fragment>
-				<td id="yellow">{order.status.name}</td>
+				<td className="ready">{order.status.name}</td>
 			</Fragment>
 		);
-	} else if (order.status.name == "Approved") {
+	} else if (isApproved(order.status.id)) {
 		orderStatus = (
 			<Fragment>
-				<td id="green">{order.status.name}</td>
+				<td className="approved">{order.status.name}</td>
 			</Fragment>
 		);
-	} else if (order.status.name == "Rejected") {
+	} else if (isRejected(order.status.id)) {
 		orderStatus = (
 			<Fragment>
-				<td id="red">{order.status.name}</td>
+				<td className="rejected">{order.status.name}</td>
+			</Fragment>
+		);
+	} else if (isCompleted(order.status.id)) {
+		orderStatus = (
+			<Fragment>
+				<td className="completed">{order.status.name}</td>
 			</Fragment>
 		);
 	}

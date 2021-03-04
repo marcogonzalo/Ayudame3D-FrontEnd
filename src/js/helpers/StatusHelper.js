@@ -17,3 +17,7 @@ export function isReady(status_id) {
 export function isApproved(status_id) {
 	return status_id === 5;
 }
+
+export function isCompleted(status_id) {
+	return status_id === 6;
+}

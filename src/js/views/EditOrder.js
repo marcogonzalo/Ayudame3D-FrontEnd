@@ -55,7 +55,7 @@ export const EditOrder = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			});
 	}
 
@@ -76,7 +76,7 @@ export const EditOrder = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			});
 	}
 
@@ -98,7 +98,7 @@ export const EditOrder = () => {
 					alert("Orden reasignada");
 					history.push("/orders");
 				})
-				.catch(error => console.log(error))
+				.catch(error => console.error(error))
 				.finally(setLoading(false));
 		}
 	}
@@ -120,7 +120,7 @@ export const EditOrder = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			});
 	}
 
@@ -171,7 +171,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			})
 			.finally(() => {
 				setSavingVideo(false); // Cambiar
@@ -198,7 +198,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -224,7 +224,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -250,7 +250,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -277,7 +277,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -344,6 +344,16 @@ export const EditOrder = () => {
 			}
 		}
 	} else if (isReady(order.status.id)) {
+		if (!isHelper(role_id)) {
+			divSaveButtons = (
+				<div className="col-md-7 mx-auto text-center">
+					<button className="btn btn-primary" onClick={setOrderApproved}>
+						Marcar como Aprobada
+					</button>
+				</div>
+			);
+		}
+	} else if (isApproved(order.status.id)) {
 		if (isHelper(role_id)) {
 			divSaveButtons = (
 				<div className="col-md-7 mx-auto text-center">
@@ -355,19 +365,11 @@ export const EditOrder = () => {
 			);
 		} else {
 			divSaveButtons = (
-				<div className="col-md-7 mx-auto text-center">
-					<button className="btn btn-primary" onClick={setOrderApproved}>
-						Marcar como Aprobada
-					</button>
+				<div className="col-md-7 mx-auto text-center text-success">
+					<span>¡Esta orden ha sido aprobada!</span>
 				</div>
 			);
 		}
-	} else if (isApproved(order.status.id)) {
-		divSaveButtons = (
-			<div className="col-md-7 mx-auto text-center text-success">
-				<span>¡Esta orden ha sido aprobada!</span>
-			</div>
-		);
 	}
 
 	function saveAddresses() {
@@ -389,7 +391,7 @@ export const EditOrder = () => {
 				setOrder(responseJson);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -411,7 +413,7 @@ export const EditOrder = () => {
 		})
 			.then(response => response.json())
 			.then(responseJson => setOrder(responseJson))
-			.catch(error => console.log(error));
+			.catch(error => console.error(error));
 	}
 
 	let uploadFilesHtml = "";
@@ -533,7 +535,7 @@ export const EditOrder = () => {
 
 	// direcciones de entrega y recogida==============================================
 	let pickupAddressHtml;
-	if (isReady(order.status.id) && isHelper(role_id)) {
+	if (isApproved(order.status.id) && isHelper(role_id)) {
 		pickupAddressHtml = (
 			<Fragment>
 				<h2>Dirección de recogida</h2>

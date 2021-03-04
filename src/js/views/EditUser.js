@@ -45,7 +45,7 @@ export const EditUser = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			});
 	}
 
@@ -67,7 +67,7 @@ export const EditUser = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			});
 	}
 
@@ -109,7 +109,7 @@ export const EditUser = () => {
 				history.push("/users");
 			})
 			.catch(
-				error => console.log(error) // Handle the error response object
+				error => console.error(error) // Handle the error response object
 			);
 	}
 
