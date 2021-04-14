@@ -25,7 +25,7 @@ export const OrderTr = props => {
 				return response.json();
 			})
 			.then(responseJson => {
-				console.log("order: ", responseJson.description, ", was deleted");
+				// console.log("order: ", responseJson.description, ", was deleted");
 				setLoadingOrder(true);
 			});
 	}

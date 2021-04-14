@@ -40,7 +40,7 @@ export const CreateUser = () => {
 			}
 		})
 			.then(response => {
-				console.log(response);
+				// console.log(response);
 				return response.json();
 			})
 			.then(responseJson => {
@@ -52,7 +52,7 @@ export const CreateUser = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				console.log("Error: " + error);
+				console.error("Error: " + error);
 			});
 	}
 
@@ -108,7 +108,7 @@ export const CreateUser = () => {
 				success => history.push("/users") // Handle the success response object
 			)
 			.catch(
-				error => console.log(error) // Handle the error response object
+				error => console.error(error) // Handle the error response object
 			);
 	}
 

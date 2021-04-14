@@ -59,7 +59,7 @@ export const CreateOrder = () => {
 			}
 		})
 			.then(response => {
-				console.log(response);
+				// console.log(response);
 				return response.json();
 			})
 			.then(responseJson => {
@@ -70,7 +70,7 @@ export const CreateOrder = () => {
 				setLoading(false);
 			})
 			.catch(error => {
-				console.log("Error:" + error);
+				console.error("Error:" + error);
 			});
 	}
 
@@ -94,7 +94,7 @@ export const CreateOrder = () => {
 				success => history.push("/orders") // Handle the success response object
 			)
 			.catch(
-				error => console.log(error) // Handle the error response object
+				error => console.error(error) // Handle the error response object
 			);
 	}
 
