@@ -40,43 +40,19 @@ export const OrderTr = props => {
 		);
 	}
 
-	let orderStatus = "";
+	let statusClass = "";
 	if (isPending(order.status.id)) {
-		orderStatus = (
-			<Fragment>
-				<td className="pending">{order.status.name}</td>
-			</Fragment>
-		);
+		statusClass = "pending";
 	} else if (isProcessing(order.status.id)) {
-		orderStatus = (
-			<Fragment>
-				<td className="processing">{order.status.name}</td>
-			</Fragment>
-		);
+		statusClass = "processing";
 	} else if (isReady(order.status.id)) {
-		orderStatus = (
-			<Fragment>
-				<td className="ready">{order.status.name}</td>
-			</Fragment>
-		);
+		statusClass = "ready";
 	} else if (isApproved(order.status.id)) {
-		orderStatus = (
-			<Fragment>
-				<td className="approved">{order.status.name}</td>
-			</Fragment>
-		);
+		statusClass = "approved";
 	} else if (isRejected(order.status.id)) {
-		orderStatus = (
-			<Fragment>
-				<td className="rejected">{order.status.name}</td>
-			</Fragment>
-		);
+		statusClass = "rejected";
 	} else if (isCompleted(order.status.id)) {
-		orderStatus = (
-			<Fragment>
-				<td className="completed">{order.status.name}</td>
-			</Fragment>
-		);
+		statusClass = "completed";
 	}
 
 	let conditionalColumns = "";
@@ -87,15 +63,14 @@ export const OrderTr = props => {
 				<td className="d-none d-sm-table-cell">{order.helper.email}</td>
 			</Fragment>
 		);
-	} else {
-		conditionalColumns = <td>{order.description}</td>;
 	}
 
 	return (
 		<tr>
 			<td>{order.id}</td>
 			{conditionalColumns}
-			{orderStatus}
+			<td>{order.description}</td>
+			<td className={statusClass}>{order.status.name}</td>
 			<td>{order.created_at}</td>
 			<td>
 				<ul className="list-inline m-0">

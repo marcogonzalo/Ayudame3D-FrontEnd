@@ -21,8 +21,8 @@ export const UserTr = props => {
 				return response.json();
 			})
 			.then(responseJson => {
-                // console.log("User: ", responseJson.full_name, ", was deleted");
-                return;
+				// console.log("User: ", responseJson.full_name, ", was deleted");
+				return;
 			});
 	}
 

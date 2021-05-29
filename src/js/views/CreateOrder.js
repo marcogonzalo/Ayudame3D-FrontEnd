@@ -13,6 +13,7 @@ export const CreateOrder = () => {
 	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [description, setDescription] = useState("");
+	const [longDescription, setLongDescription] = useState("");
 	const [helper, setHelper] = useState(0);
 
 	let role_id = actions.getLoggedUserRoleID();
@@ -77,6 +78,7 @@ export const CreateOrder = () => {
 	function createOrder() {
 		const formData = new FormData();
 		formData.append("description", description);
+		formData.append("long_description", longDescription);
 		formData.append("helper_id", helper);
 		formData.append("files", files);
 
@@ -132,7 +134,7 @@ export const CreateOrder = () => {
 						<div className="card-body">
 							<div className="form-group row">
 								<label htmlFor="user_rol" className="col-md-4 col-form-label text-md-right">
-									Description
+									Subject
 								</label>
 								<div className="col-md-6">
 									<input
@@ -143,6 +145,22 @@ export const CreateOrder = () => {
 										name="description"
 										value={description}
 									/>
+								</div>
+							</div>
+							<div className="form-group row">
+								<label htmlFor="user_rol" className="col-md-4 col-form-label text-md-right">
+									Long description
+								</label>
+								<div className="col-md-6">
+									<textarea
+										onChange={e => setLongDescription(e.target.value)}
+										type="text"
+										id="longDescription"
+										className="form-control"
+										name="longDescription"
+										maxLength="5000">
+										{longDescription}
+									</textarea>
 								</div>
 							</div>
 

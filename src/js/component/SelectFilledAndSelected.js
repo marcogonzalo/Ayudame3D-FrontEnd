@@ -16,8 +16,8 @@ export const SelectFilledAndSelected = props => {
 
 	return (
 		<select
-			defaultValue={props.idSelected}
 			className="custom-select mr-sm-2"
+			value={props.idSelected}
 			onChange={e => props.onChange(e.target.value)}>
 			<option>Choose...</option>
 			{dataHtml}

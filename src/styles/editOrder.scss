@@ -44,6 +44,10 @@ body{
     margin-left: 0;
     margin-right: 0;
 }
+
+textarea.long-description {
+    height: 300px;
+}
 .save-btn{
     width: 7rem;
 }

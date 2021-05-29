@@ -87,8 +87,6 @@ export const Orders = () => {
 				<th className="d-none d-sm-table-cell">Email</th>
 			</Fragment>
 		);
-	} else {
-		conditionalColumns = <th>Description</th>;
 	}
 
 	return (
@@ -104,6 +102,7 @@ export const Orders = () => {
 					<tr>
 						<th>Id Order</th>
 						{conditionalColumns}
+						<th>Subject</th>
 						<th>Status</th>
 						<th>Created At</th>
 						<th>Actions</th>

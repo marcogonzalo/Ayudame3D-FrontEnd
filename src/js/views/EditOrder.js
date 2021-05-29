@@ -18,7 +18,7 @@ export const EditOrder = () => {
 	const [helperAssigned, setHelperAssigned] = useState();
 	const [loading, setLoading] = useState(true);
 	const [statuses, setStatuses] = useState([]);
-	const [status, setStatus] = useState([]);
+	const [status, setStatus] = useState(0);
 
 	const [files, setFiles] = useState("");
 	const [video, setVideo] = useState([]);
@@ -116,7 +116,7 @@ export const EditOrder = () => {
 				if (responseJson.msg !== undefined && responseJson.msg === "Token has expired") {
 					history.push("/");
 				}
-				setStatuses(responseJson.slice(1));
+				setStatuses(responseJson);
 				setLoading(false);
 			})
 			.catch(error => {
@@ -564,7 +564,6 @@ export const EditOrder = () => {
 			</Fragment>
 		);
 	}
-	const descriptionStyle = isHelper(role_id) ? "form-control-plaintext" : "form-control";
 	return (
 		<div className="container">
 			<h1> Edit Order</h1>
@@ -574,16 +573,32 @@ export const EditOrder = () => {
 						<div className="card-body">
 							<div className="form-group row">
 								<label htmlFor="description" className="col-md-3 col-form-label text-md-right">
-									Description :
+									Subject :
 								</label>
 								<div className="col-md-9">
 									<input
 										type="text"
 										id="description"
-										className={descriptionStyle}
+										className="form-control-plaintext"
 										name="description"
 										defaultValue={order.description}
+										readOnly
 									/>
+								</div>
+							</div>
+							<div className="form-group row">
+								<label htmlFor="longDescription" className="col-md-3 col-form-label text-md-right">
+									Long description :
+								</label>
+								<div className="col-md-9">
+									<textarea
+										id="longDescription"
+										className="long-description form-control-plaintext"
+										name="longDescription"
+										maxLength="5000"
+										readOnly>
+										{order.long_description}
+									</textarea>
 								</div>
 							</div>
 
