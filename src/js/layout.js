@@ -8,7 +8,8 @@ import { EditOrder } from "./views/EditOrder";
 import { EditUser } from "./views/EditUser";
 import { Orders } from "./views/Orders";
 import { Login } from "./views/Login";
-import { ForgotPassword } from "./views/forgot-password";
+import { ForgotPassword } from "./views/ForgotPassword";
+import { ResetPassword } from "./views/ResetPassword";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import injectContext from "./store/appContext";
@@ -39,6 +40,9 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/forgot-password">
 							<ForgotPassword />
+						</Route>
+						<Route exact path="/reset-password">
+							<ResetPassword />
 						</Route>
 						<Route exact path="/users/create">
 							<CreateUser />
